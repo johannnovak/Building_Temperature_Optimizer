@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 using System.Net;
@@ -8,36 +9,34 @@ using SimpleJSON;
 
 public class WeatherRequester : MonoBehaviour {
 
-	public string m_town;
+	public Text m_textCity;
+	public GameObject m_controller;
+	public GameObject m_textOK;
 
-	// Use this for initialization
-	void Start () {
-		RequestWeather ();
-	}
-
-	public Weather RequestWeather()
+	public void RequestWeather()
 	{
-		string json = GetJSONFromWebRequest ("http://api.worldweatheronline.com/free/v2/weather.ashx?q="+m_town+"&format=json&num_of_days=1&date=today&key=b1fbba3aff3f713681d871adf0f99");
-		JSONNode document = JSON.Parse (json);
+		if (m_textCity.text != "") {
+			string json = GetJSONFromWebRequest ("http://api.worldweatheronline.com/free/v2/weather.ashx?q=" + m_textCity.text + "&format=json&num_of_days=1&date=today&key=b1fbba3aff3f713681d871adf0f99");
+			JSONNode document = JSON.Parse (json);
 	
-		/* sunset/rise */
-		string sunRise = document["data"]["weather"][0]["astronomy"][0]["sunrise"].ToString().Split(new char[]{'\"'})[1];
-		float sunRiseHour = float.Parse(sunRise.Split(new char[]{':'})[0])+(sunRise.EndsWith("PM")?12:0);
-		float sunRiseMinute = float.Parse (sunRise.Split (new char[]{':'})[1].Remove(2));
+			/* sunset/rise */
+			string sunRise = document ["data"] ["weather"] [0] ["astronomy"] [0] ["sunrise"].ToString ().Split (new char[]{'\"'}) [1];
+			float sunRiseHour = float.Parse (sunRise.Split (new char[]{':'}) [0]) + (sunRise.EndsWith ("PM") ? 12 : 0);
+			float sunRiseMinute = float.Parse (sunRise.Split (new char[]{':'}) [1].Remove (2));
 
-		string sunSet = document["data"]["weather"][0]["astronomy"][0]["sunset"].ToString().Split(new char[]{'\"'})[1];
-		float sunSetHour = float.Parse(sunSet.Split(new char[]{':'})[0])+(sunSet.EndsWith("PM")?12:0);
-		float sunSetMinute = float.Parse (sunSet.Split(new char[]{':'})[1].Remove(2));
+			string sunSet = document ["data"] ["weather"] [0] ["astronomy"] [0] ["sunset"].ToString ().Split (new char[]{'\"'}) [1];
+			float sunSetHour = float.Parse (sunSet.Split (new char[]{':'}) [0]) + (sunSet.EndsWith ("PM") ? 12 : 0);
+			float sunSetMinute = float.Parse (sunSet.Split (new char[]{':'}) [1].Remove (2));
 
-		Dictionary<float, float> timeAndTemperature = new Dictionary<float, float> ();
+			Dictionary<float, float> timeAndTemperature = new Dictionary<float, float> ();
 
-		/* hours / temperature */
-		for (int i = 0; i < document["data"]["weather"][0]["hourly"].Count; ++i)
-			timeAndTemperature.Add(float.Parse(document ["data"] ["weather"] [0] ["hourly"] [i] ["time"])/100, float.Parse (document ["data"] ["weather"] [0] ["hourly"] [i] ["tempC"]));
+			/* hours / temperature */
+			for (int i = 0; i < document["data"]["weather"][0]["hourly"].Count; ++i)
+				timeAndTemperature.Add (float.Parse (document ["data"] ["weather"] [0] ["hourly"] [i] ["time"]) / 100, float.Parse (document ["data"] ["weather"] [0] ["hourly"] [i] ["tempC"]));
 
-		Weather weather = new Weather (sunRiseHour, sunRiseMinute, sunSetHour, sunSetMinute, timeAndTemperature);
-	
-		return weather;
+			m_controller.GetComponent<SimulationController>().SetSimulationWeather(new Weather (sunRiseHour, sunRiseMinute, sunSetHour, sunSetMinute, timeAndTemperature));
+			m_textOK.SetActive(true);
+		}
 	}
 
 	private static string GetJSONFromWebRequest(string _url)
