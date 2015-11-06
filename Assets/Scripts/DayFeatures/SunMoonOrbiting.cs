@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class SunMoonOrbiting : MonoBehaviour {
-	
+
 	public float m_currentTimeHour;
 	public float m_currentTimeMinute;
 	private float m_currentTimeSeconds;
@@ -16,16 +16,12 @@ public class SunMoonOrbiting : MonoBehaviour {
 
 	private float m_currentAngle;
 
-	private float m_dayTimeRatio;
-	private float m_nightTimeRatio;
 	private float m_dayTimeSecond;
 	private float m_nightTimeSecond;
 
 	void Start () {
 		float dayTimeHour = (m_sunSetHour+m_sunSetMinute/60) - (m_sunRiseHour+m_sunRiseMinute/60);
-		m_dayTimeRatio = (24 - dayTimeHour)/24;
-		m_nightTimeRatio = 1 - m_dayTimeRatio;
-		m_dayTimeSecond = (dayTimeHour) * 3600;
+		m_dayTimeSecond = dayTimeHour * 3600;
 		m_nightTimeSecond = (24 - dayTimeHour) * 3600;
 
 		ComputeFirstOrbitRotation ();
