@@ -41,23 +41,27 @@ public class Weather : MonoBehaviour {
 		return m_sunSetMinute;
 	}
 
-	public float GetTemperatureWithTime(float _time)
+	public float GetTemperatureWithTime(float _timeHour, float _timeMinute, float _timeSecond)
 	{
-		float temperature;
-		m_timeAndTemperature.TryGetValue (_time, out temperature);
-		return temperature;
-	}
-
-	public float GetTimeAssociatedWithTemperature(float _temperature)
-	{
-		foreach(float time in m_timeAndTemperature.Keys)
+		bool firstPassed = false;
+		KeyValuePair<float, float> lastPair = new KeyValuePair<float, float>(0,0);
+		float time = _timeHour + _timeMinute / 60 + _timeSecond / 3600;
+		foreach(KeyValuePair<float, float> pair in m_timeAndTemperature)
 		{
-			float temperature;
-			m_timeAndTemperature.TryGetValue(time, out temperature);
-			if(temperature == _temperature)
-				return time;
+			if(firstPassed && time <= pair.Key && time >= lastPair.Key)
+			{
+				float offset = lastPair.Value;
+				float slope = (pair.Value - lastPair.Value)/(pair.Key - lastPair.Key);
+				float normalizedTime = (time - lastPair.Key);
+
+				/* f(t) = lastTemp + slope(lastTemp->CurrentTemp) * (Time elapsed since lastTime) */
+				return (offset + slope * normalizedTime);
+			}
+
+			lastPair = pair;
+			firstPassed = true;
 		}
-		return -1;
+		return 0F;
 	}
 
 	public override string ToString ()
