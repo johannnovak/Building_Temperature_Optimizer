@@ -60,10 +60,13 @@ public class OptionController : MonoBehaviour {
 			if (string.IsNullOrEmpty (city))
 			{
 				configurationOK = false;
-				problemDesc = "City was not found online.";
+				problemDesc = "Empty City InputField.";
 			}
 			else
-				configurationOK |= GetComponent<WeatherConfigurator> ().RequestOnlineWeather (city, simulationTimeHour, simulationTimeMinute, simulationDurationHour, simulationDurationMinute);
+			{
+				configurationOK &= GetComponent<WeatherConfigurator> ().RequestOnlineWeather (city, simulationTimeHour, simulationTimeMinute, simulationDurationHour, simulationDurationMinute);
+				problemDesc = "City was not found online.\n Or, could not connect to worldweatheronline.com.";
+			}
 		}
 		else /* Static input of values. */
 		{

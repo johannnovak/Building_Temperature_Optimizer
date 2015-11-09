@@ -19,6 +19,13 @@ public class WeatherConfigurator : MonoBehaviour {
 	public bool RequestOnlineWeather(string _city, float _simulationTimeHour, float _simulationTimeMinute, float _simulationDurationHour, float _simulationDurationMinute)
 	{
 		string json = GetJSONFromWebRequest ("http://api.worldweatheronline.com/free/v2/weather.ashx?q=" + _city + "&format=json&num_of_days=1&date=today&key=b1fbba3aff3f713681d871adf0f99");
+
+		Debug.Log (json);
+		Debug.Log (string.IsNullOrEmpty (json));
+
+		if (string.IsNullOrEmpty (json))
+			return false;
+
 		JSONNode document = JSON.Parse (json);
 
 		if(document["data"]["error"].Count > 0)
@@ -49,14 +56,22 @@ public class WeatherConfigurator : MonoBehaviour {
 
 	private static string GetJSONFromWebRequest(string _url)
 	{
+		string json = string.Empty;
 		WebRequest request = WebRequest.Create (_url);
-		WebResponse response = request.GetResponse ();
-		Stream data = response.GetResponseStream ();
-		string json = "";
-		using (StreamReader sr = new StreamReader(data)) {
-			json = sr.ReadToEnd ();
+		try
+		{
+			WebResponse response = request.GetResponse ();
+			Stream data = response.GetResponseStream ();
+			using (StreamReader sr = new StreamReader(data))
+				json = sr.ReadToEnd ();
+			
+			return json;
 		}
-		return json;
+		catch(WebException e)
+		{
+			Debug.Log("exception");
+			return null;
+		}
 	}
 
 	public void CreateOfflineWeather(float _simulationTimeHour, float _simulationTimeMinute, float _simulationDurationHour, float _simulationDurationMinute, float _simulationSunriseHour, float _simulationSunriseMinute, float _simulationSunsetHour, float _simulationSunsetMinute, Dictionary<float,float> _timeAndTemperature)
