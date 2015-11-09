@@ -7,7 +7,7 @@ public class Room : MonoBehaviour {
 	private float m_length;
 	private float m_height;
 
-	private void Start()
+	public void Initialize()
 	{
 		if(transform.childCount == 0)
 		{
@@ -17,8 +17,13 @@ public class Room : MonoBehaviour {
 		}
 		else
 		{
-
+			
 		}
+	}
+
+	private void Start()
+	{
+
 	}
 
 	public override string ToString()

@@ -54,7 +54,7 @@ public class SunMoonOrbiting : MonoBehaviour {
 		/* sunrise < time < sunset */
 		if ((m_currentTimeHour+m_currentTimeMinute/60) > (_weather.GetSunRiseHour()+_weather.GetSunRiseMinute()/60) && (m_currentTimeHour+m_currentTimeMinute/60) < (_weather.GetSunSetHour()+_weather.GetSunSetMinute()/60)) 
 		{
-			float elapsedTime = ((m_currentTimeHour*3600+m_currentTimeMinute*60) - (_weather.GetSunRiseHour()*3600+_weather.GetSunRiseMinute()*60)) * 3600;
+			float elapsedTime = ((m_currentTimeHour*3600+m_currentTimeMinute*60) - (_weather.GetSunRiseHour()*3600+_weather.GetSunRiseMinute()*60));
 			deltaAngle = (elapsedTime * 180F)/ m_dayTimeSecond;
 		}
 		else /* time > sunset && time < sunrise */
@@ -77,7 +77,6 @@ public class SunMoonOrbiting : MonoBehaviour {
 
 
 	void Update () {
-		Debug.Log ("********************");
 		float updatedTime = Time.deltaTime * m_timeSpeed;
 		m_currentTimeSeconds += updatedTime;
 		if(m_currentTimeSeconds >= 60)
@@ -90,7 +89,6 @@ public class SunMoonOrbiting : MonoBehaviour {
 				m_currentTimeHour = (m_currentTimeHour + 1) % 24;
 				m_currentTimeMinute = 0;
 			}
-
 			GetComponent<TimeUpdater>().UpdateTime(m_currentTimeHour,m_currentTimeMinute);
 		}
 
@@ -99,13 +97,10 @@ public class SunMoonOrbiting : MonoBehaviour {
 			deltaAngle = (updatedTime * 180F)/ m_dayTimeSecond;
 		else
 			deltaAngle = (updatedTime * 180F)/ m_nightTimeSecond;
-		Debug.Log (deltaAngle);
 
 		float modAngle = deltaAngle%360;
-		Debug.Log (modAngle);
 
 		transform.RotateAround(Vector3.zero, Vector3.right, modAngle);
-		Debug.Log (transform.rotation.eulerAngles.ToString("F8"));
 
 		transform.GetChild (0).LookAt (Vector3.zero);
 		transform.GetChild (1).LookAt (Vector3.zero);
@@ -126,4 +121,18 @@ public class SunMoonOrbiting : MonoBehaviour {
 	{
 		m_timeSpeed /= 2;
 	}
+	
+	public float GetSunAngle()
+	{
+		if(transform.GetChild(0).position.y > 0)
+		   return (transform.GetChild(0).position.z < 0) ? transform.rotation.eulerAngles.x : 180 - transform.rotation.eulerAngles.x;
+		return 0F;
+	}	
+	
+	public float GetMoonAngle()
+	{
+		if(transform.GetChild(1).position.y > 0)
+			return (transform.GetChild(1).position.z < 0) ? 360 - transform.rotation.eulerAngles.x : (180F - transform.rotation.eulerAngles.x)*(-1);
+		return 0F;
+	}	
 }

@@ -20,9 +20,6 @@ public class WeatherConfigurator : MonoBehaviour {
 	{
 		string json = GetJSONFromWebRequest ("http://api.worldweatheronline.com/free/v2/weather.ashx?q=" + _city + "&format=json&num_of_days=1&date=today&key=b1fbba3aff3f713681d871adf0f99");
 
-		Debug.Log (json);
-		Debug.Log (string.IsNullOrEmpty (json));
-
 		if (string.IsNullOrEmpty (json))
 			return false;
 
@@ -67,9 +64,8 @@ public class WeatherConfigurator : MonoBehaviour {
 			
 			return json;
 		}
-		catch(WebException e)
+		catch(WebException)
 		{
-			Debug.Log("exception");
 			return null;
 		}
 	}

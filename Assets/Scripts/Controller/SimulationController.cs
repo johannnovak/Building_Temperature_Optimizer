@@ -22,12 +22,14 @@ public class SimulationController : MonoBehaviour {
 
 	public void Go()
 	{
+		m_world.SetActive (true);
 		m_menuPanel.SetActive (false);
 		m_simulationPanel.SetActive (true);
-		m_world.SetActive (true);
 
 		m_sunMoonOrbiting.SetCurrentTime(m_simulationHour, m_simulationMinute);
 		m_sunMoonOrbiting.ComputeDayTime (m_simulationWeather);
+
+		Debug.Log ("Starting simulation with time : " + m_simulationHour + ":" + m_simulationMinute);
 	}
 
 	// Update is called once per frame

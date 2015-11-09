@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class CameraRotation : MonoBehaviour {
+public class CameraHandling : MonoBehaviour {
 
 	private float m_rotationX;
 	private float m_rotationY;
