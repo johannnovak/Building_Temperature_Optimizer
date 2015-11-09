@@ -63,7 +63,7 @@ public class SunMoonOrbiting : MonoBehaviour {
 
 			/* time > sunset */
 			if(m_currentTimeHour >= 12)
-				elapsedTime = (m_currentTimeHour*3600+m_currentTimeMinute*60) - (_weather.GetSunSetHour()*3600+_weather.GetSunSetMinute()*60);
+				elapsedTime = m_dayTimeSecond + (m_currentTimeHour*3600+m_currentTimeMinute*60) - (_weather.GetSunSetHour()*3600+_weather.GetSunSetMinute()*60);
 			else /* time < sunrise */
 				elapsedTime = (m_currentTimeHour*3600+m_currentTimeMinute*60) - (_weather.GetSunRiseHour()*3600+_weather.GetSunRiseMinute()*60);
 			deltaAngle = (elapsedTime * 180F)/ m_nightTimeSecond;

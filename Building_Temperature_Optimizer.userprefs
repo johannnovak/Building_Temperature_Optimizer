@@ -1,12 +1,13 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\DayFeatures\SunMoonOrbiting.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Building\Room.cs">
     <Files>
-      <File FileName="Assets\Scripts\DayFeatures\Weather.cs" Line="57" Column="86" />
-      <File FileName="Assets\Scripts\DayFeatures\SunMoonOrbiting.cs" Line="59" Column="1" />
-      <File FileName="Assets\Scripts\Controller\OptionController.cs" Line="91" Column="21" />
-      <File FileName="Assets\Scripts\DayFeatures\WeatherConfigurator.cs" Line="65" Column="75" />
-      <File FileName="Assets\Scripts\Controller\SimulationController.cs" Line="20" Column="2" />
+      <File FileName="Assets\Scripts\Building\Room.cs" Line="20" Column="1" />
+      <File FileName="Assets\Scripts\DayFeatures\Weather.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\DayFeatures\SunMoonOrbiting.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Controller\OptionController.cs" Line="63" Column="31" />
+      <File FileName="Assets\Scripts\DayFeatures\WeatherConfigurator.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Controller\SimulationController.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
