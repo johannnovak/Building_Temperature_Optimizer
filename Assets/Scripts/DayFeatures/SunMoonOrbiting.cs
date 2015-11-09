@@ -43,20 +43,18 @@ public class SunMoonOrbiting : MonoBehaviour {
 		m_dayTimeSecond = dayTimeHour * 3600;
 		m_nightTimeSecond = (24 - dayTimeHour) * 3600;
 		
-		ComputeFirstOrbitRotation ();
+		ComputeFirstOrbitRotation (_weather);
 		
 		GetComponent<TimeUpdater> ().UpdateTime (m_currentTimeHour, m_currentTimeMinute);
 	}
 
-	private void ComputeFirstOrbitRotation()
+	private void ComputeFirstOrbitRotation(Weather _weather)
 	{
-		Debug.Log (m_currentTimeHour+":"+m_currentTimeMinute);
-
 		float deltaAngle = 0;
 		/* sunrise < time < sunset */
-		if ((m_currentTimeHour+m_currentTimeMinute/60) > (m_sunRiseHour+m_sunRiseMinute/60) && (m_currentTimeHour+m_currentTimeMinute/60) < (m_sunSetHour+m_sunSetMinute/60)) 
+		if ((m_currentTimeHour+m_currentTimeMinute/60) > (_weather.GetSunRiseHour()+_weather.GetSunRiseMinute()/60) && (m_currentTimeHour+m_currentTimeMinute/60) < (_weather.GetSunSetHour()+_weather.GetSunSetMinute()/60)) 
 		{
-			float elapsedTime = ((m_currentTimeHour*3600+m_currentTimeMinute*60) - (m_sunRiseHour*3600+m_sunRiseMinute*60)) * 3600;
+			float elapsedTime = ((m_currentTimeHour*3600+m_currentTimeMinute*60) - (_weather.GetSunRiseHour()*3600+_weather.GetSunRiseMinute()*60)) * 3600;
 			deltaAngle = (elapsedTime * 180F)/ m_dayTimeSecond;
 		}
 		else /* time > sunset && time < sunrise */
@@ -65,13 +63,13 @@ public class SunMoonOrbiting : MonoBehaviour {
 
 			/* time > sunset */
 			if(m_currentTimeHour >= 12)
-				elapsedTime = (m_currentTimeHour*3600+m_currentTimeMinute*60) - (m_sunSetHour*3600+m_sunSetMinute*60);
+				elapsedTime = (m_currentTimeHour*3600+m_currentTimeMinute*60) - (_weather.GetSunSetHour()*3600+_weather.GetSunSetMinute()*60);
 			else /* time < sunrise */
-				elapsedTime = (m_currentTimeHour*3600+m_currentTimeMinute*60) - (m_sunRiseHour*3600+m_sunRiseMinute*60);
+				elapsedTime = (m_currentTimeHour*3600+m_currentTimeMinute*60) - (_weather.GetSunRiseHour()*3600+_weather.GetSunRiseMinute()*60);
 			deltaAngle = (elapsedTime * 180F)/ m_nightTimeSecond;
 		}
-
 		float modAngle = deltaAngle%360;
+
 		transform.RotateAround(Vector3.zero, Vector3.right, modAngle);
 		transform.GetChild (0).LookAt (Vector3.zero);
 		transform.GetChild (1).LookAt (Vector3.zero);
