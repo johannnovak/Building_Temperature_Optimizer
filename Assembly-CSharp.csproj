@@ -53,11 +53,12 @@
      <Compile Include="Assets\Scripts\Controller\SimulationController.cs" />
      <Compile Include="Assets\Scripts\DayFeatures\SunMoonOrbiting.cs" />
      <Compile Include="Assets\Scripts\DayFeatures\TemperatureUpdater.cs" />
-     <Compile Include="Assets\Scripts\DayFeatures\TimeUpdater.cs" />
      <Compile Include="Assets\Scripts\DayFeatures\Weather.cs" />
      <Compile Include="Assets\Scripts\DayFeatures\WeatherConfigurator.cs" />
-     <Compile Include="Assets\Scripts\Listener\BuildingFloorListener.cs" />
-     <Compile Include="Assets\Scripts\Listener\InputFieldKeyListener.cs" />
+     <Compile Include="Assets\Scripts\UI\BuildingFloorListener.cs" />
+     <Compile Include="Assets\Scripts\UI\InputFieldKeyListener.cs" />
+     <Compile Include="Assets\Scripts\UI\InputFieldTimeUpdater.cs" />
+     <Compile Include="Assets\Scripts\UI\SimulationTimeTempUpdater.cs" />
      <Compile Include="Assets\Scripts\Utils\SimpleJSON.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>

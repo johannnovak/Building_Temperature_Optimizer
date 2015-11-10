@@ -64,6 +64,11 @@ public class Weather : MonoBehaviour {
 		return 0F;
 	}
 
+	public Dictionary<float, float> GetTimeAndTemperatures()
+	{
+		return m_timeAndTemperature;
+	}
+
 	public override string ToString ()
 	{
 		string display = "";

@@ -1,10 +1,12 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
 public class SunMoonOrbiting : MonoBehaviour {
 
 	public bool m_mockTest;
+
+	private int m_currentTimeDay;
 	public float m_currentTimeHour;
 	public float m_currentTimeMinute;
 	private float m_currentTimeSeconds;
@@ -45,7 +47,7 @@ public class SunMoonOrbiting : MonoBehaviour {
 		
 		ComputeFirstOrbitRotation (_weather);
 		
-		GetComponent<TimeUpdater> ().UpdateTime (m_currentTimeHour, m_currentTimeMinute);
+		GetComponent<SimulationTimeTempUpdater> ().UpdateTimeAndTemperature (m_currentTimeHour, m_currentTimeMinute, SimulationController.GetCurrentTemperature(m_currentTimeDay, m_currentTimeHour, m_currentTimeMinute, m_currentTimeSeconds));
 	}
 
 	private void ComputeFirstOrbitRotation(Weather _weather)
@@ -81,15 +83,21 @@ public class SunMoonOrbiting : MonoBehaviour {
 		m_currentTimeSeconds += updatedTime;
 		if(m_currentTimeSeconds >= 60)
 		{
-			m_currentTimeMinute += 1;
+			++m_currentTimeMinute;
 			m_currentTimeSeconds %= 60;
 			
 			if (m_currentTimeMinute == 60) 
 			{
-				m_currentTimeHour = (m_currentTimeHour + 1) % 24;
+				++m_currentTimeHour;
 				m_currentTimeMinute = 0;
 			}
-			GetComponent<TimeUpdater>().UpdateTime(m_currentTimeHour,m_currentTimeMinute);
+
+			if(m_currentTimeHour == 24)
+			{
+				++m_currentTimeDay;
+				m_currentTimeHour = 0;
+			}
+			GetComponent<SimulationTimeTempUpdater>().UpdateTimeAndTemperature (m_currentTimeHour, m_currentTimeMinute, SimulationController.GetCurrentTemperature(m_currentTimeDay, m_currentTimeHour, m_currentTimeMinute, m_currentTimeSeconds));
 		}
 
 		float deltaAngle = 0;

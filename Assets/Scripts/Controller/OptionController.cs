@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 public class OptionController : MonoBehaviour {
 
@@ -47,8 +48,9 @@ public class OptionController : MonoBehaviour {
 		bool configurationOK = true;
 		string problemDesc = "";
 
-		float simulationTimeHour = string.IsNullOrEmpty (m_simulationTimeHourInputField.text) ? 0F : float.Parse (m_simulationTimeHourInputField.text);
-		float simulationTimeMinute = string.IsNullOrEmpty (m_simulationTimeMinuteInputField.text) ? 0F : float.Parse (m_simulationTimeMinuteInputField.text);
+		string[] currentTime = DateTime.Now.ToString ("HH:mm").Split (':');
+		float simulationTimeHour = string.IsNullOrEmpty (m_simulationTimeHourInputField.text) ? float.Parse(currentTime[0]) : float.Parse (m_simulationTimeHourInputField.text);
+		float simulationTimeMinute = string.IsNullOrEmpty (m_simulationTimeMinuteInputField.text) ? float.Parse(currentTime[1]) : float.Parse (m_simulationTimeMinuteInputField.text);
 		
 		float simulationDurationHour = string.IsNullOrEmpty (m_simulationDurationHourInputField.text) ? 0F : float.Parse (m_simulationDurationHourInputField.text);
 		float simulationDurationMinute = string.IsNullOrEmpty (m_simulationDurationMinuteInputField.text) ? 0F : float.Parse (m_simulationDurationMinuteInputField.text);
@@ -64,8 +66,9 @@ public class OptionController : MonoBehaviour {
 			}
 			else
 			{
-				configurationOK &= GetComponent<WeatherConfigurator> ().RequestOnlineWeather (city, simulationTimeHour, simulationTimeMinute, simulationDurationHour, simulationDurationMinute);
-				problemDesc = "City was not found online.\n Or, could not connect to worldweatheronline.com.";
+				KeyValuePair<bool, string> pair = GetComponent<WeatherConfigurator> ().RequestOnlineWeather (city, simulationTimeHour, simulationTimeMinute, simulationDurationHour, simulationDurationMinute);
+				configurationOK &= pair.Key;
+				problemDesc = pair.Value;
 			}
 		}
 		else /* Static input of values. */
@@ -85,7 +88,16 @@ public class OptionController : MonoBehaviour {
 			string[] timeAndTemperaturesStrings = m_simulationTemperatures.text.Split(';');
 			Dictionary<float, float> timeAndTemperature = new Dictionary<float, float> ();
 			for (int i = 0; i < timeAndTemperaturesStrings.Length; ++i)
-				timeAndTemperature.Add (float.Parse (timeAndTemperaturesStrings[i].Split(':')[0]), float.Parse (timeAndTemperaturesStrings[i].Split(':')[1]));
+			{
+				float hour = float.Parse (timeAndTemperaturesStrings[i].Split(':')[0]);
+				float temperature = float.Parse (timeAndTemperaturesStrings[i].Split(':')[1]);
+				if(i == 0 && (simulationTimeHour+simulationTimeMinute/60) < hour)
+				{
+					configurationOK = false;
+					problemDesc = "Simulation time happening before first time/temperature pair.";
+				}
+				timeAndTemperature.Add (hour, temperature);
+			}
 
 			if(configurationOK)
 				GetComponent<WeatherConfigurator>().CreateOfflineWeather(simulationTimeHour, simulationTimeMinute, simulationDurationHour, simulationDurationMinute, simulationSunriseHour, simulationSunriseMinute, simulationSunsetHour, simulationSunsetMinute, timeAndTemperature);
