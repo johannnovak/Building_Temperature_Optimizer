@@ -60,25 +60,50 @@ public class StaticWeatherUpdaterButton : MonoBehaviour {
 		m_sunRiseHour = _sunRiseHour;
 		Debug.Log(m_sunRiseHour);
 	}
+
+	public string GetSunRiseHour()
+	{
+		return m_sunRiseHour;
+	}
 	
 	public void SetSunRiseMinute(string _sunRiseMinute)
 	{
 		m_sunRiseMinute = _sunRiseMinute;
 	}
 	
+	public string GetSunRiseMinute()
+	{
+		return m_sunRiseMinute;
+	}
+
 	public void SetSunSetHour(string _sunSetHour)
 	{
 		m_sunSetHour = _sunSetHour;
 	}
 	
+	public string GetSunSetHour()
+	{
+		return m_sunSetHour;
+	}
+
 	public void SetSunSetMinute(string _sunSetMinute)
 	{
-		m_sunSetHour = _sunSetMinute;
+		m_sunSetMinute = _sunSetMinute;
+	}
+	
+	public string GetSunSetMinute()
+	{
+		return m_sunSetMinute;
 	}
 
 	public void SetTimeAndTemperature(string _timeAndTemperature)
 	{
 		m_timeAndTemperature = _timeAndTemperature;
+	}
+	
+	public string GetTimeAndTemperature()
+	{
+		return m_timeAndTemperature;
 	}
 
 	public bool IsSelected()

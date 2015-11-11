@@ -16,21 +16,25 @@ public class WeatherConfigurator : MonoBehaviour {
 	//	RequestWeather ("besancin", 0F, 0F, 0F, 0F);
 	}
 
-	public KeyValuePair<bool,string> RequestOnlineWeather(string _city, float _simulationTimeHour, float _simulationTimeMinute, float _simulationDurationHour, float _simulationDurationMinute)
+	public KeyValuePair<bool,string> RequestOnlineWeather(string _city, float _simulationTimeHour, float _simulationTimeMinute, float _simulationDurationHour, float _simulationDurationMinute, ref Text _textConfigureDescription)
 	{
+		Debug.Log ("dfsdfsdfsf");
+		_textConfigureDescription.text = "Requesting worldweatheronline.com...";
 		string json = GetJSONFromWebRequest ("http://api.worldweatheronline.com/free/v2/weather.ashx?q=" + _city + "&format=json&num_of_days=10&date=today&key=b1fbba3aff3f713681d871adf0f99");
-
-		Debug.Log (json);
 
 		if (string.IsNullOrEmpty (json))
 			return new KeyValuePair<bool, string> (false, "Could not connect to worldweatheronline.com.");
+		
+		_textConfigureDescription.text = "JSON response obtained. Parsing...";
 
 		JSONNode document = JSON.Parse (json);
-
 		if(document["data"]["error"].Count > 0)
 			return new KeyValuePair<bool, string> (false, "City not found.");
 		else
 		{
+			string s = "Extracting values from response...";
+			_textConfigureDescription.text = s;
+
 			/* for each day requested. */
 			int dayNumber = 0;
 			JSONArray weatherDays = document ["data"] ["weather"].AsArray;
@@ -38,6 +42,8 @@ public class WeatherConfigurator : MonoBehaviour {
 			KeyValuePair<float, float> lastPair = new KeyValuePair<float, float>();
 			foreach(JSONNode weather in weatherDays.Childs)
 			{
+				_textConfigureDescription.text = s + "\nDay "+dayNumber;
+
 				/* sunset/rise */
 				string sunRise = weather["astronomy"] [0] ["sunrise"].ToString ().Split (new char[]{'\"'}) [1];
 				float sunRiseHour = float.Parse (sunRise.Split (new char[]{':'}) [0]) + (sunRise.EndsWith ("PM") ? 12 : 0);
@@ -48,7 +54,7 @@ public class WeatherConfigurator : MonoBehaviour {
 				float sunSetMinute = float.Parse (sunSet.Split (new char[]{':'}) [1].Remove (2));
 				
 				Dictionary<float, float> timeAndTemperature = new Dictionary<float, float> ();
-				
+
 				/* hours / temperature */
 				for (int i = 0; i < weather["hourly"].Count; ++i)
 				{
@@ -77,7 +83,9 @@ public class WeatherConfigurator : MonoBehaviour {
 				m_controller.SetCurrentTime(_simulationTimeHour, _simulationTimeMinute);
 				++dayNumber;
 			}
-			
+
+			_textConfigureDescription.text = "Extraction complete.";
+
 			return new KeyValuePair<bool, string> (true, "");
 		}
 	}
@@ -101,9 +109,59 @@ public class WeatherConfigurator : MonoBehaviour {
 		}
 	}
 
-	public void CreateOfflineWeather(float _simulationTimeHour, float _simulationTimeMinute, float _simulationDurationHour, float _simulationDurationMinute, float _simulationSunriseHour, float _simulationSunriseMinute, float _simulationSunsetHour, float _simulationSunsetMinute, Dictionary<float,float> _timeAndTemperature)
+
+	public KeyValuePair<bool,string> CreateOfflineWeather(float _simulationTimeHour, float _simulationTimeMinute, float _simulationDurationHour, float _simulationDurationMinute, StaticWeatherUpdaterButton[] _weatherButtons)
 	{
-		m_controller.AddSimulationWeather(new Weather (_simulationSunriseHour, _simulationSunriseMinute, _simulationSunsetHour, _simulationSunsetMinute, _timeAndTemperature));
 		m_controller.SetCurrentTime(_simulationTimeHour, _simulationTimeMinute);
+		int dayNumber = 0;
+		Weather previousWeather = null;
+		KeyValuePair<float, float> lastPair = new KeyValuePair<float, float>();
+		foreach(StaticWeatherUpdaterButton button in _weatherButtons)
+		{
+			float simulationSunriseHour = string.IsNullOrEmpty (button.GetSunRiseHour()) ? 0F : float.Parse (button.GetSunRiseHour());
+			float simulationSunriseMinute = string.IsNullOrEmpty (button.GetSunRiseMinute()) ? 0F : float.Parse (button.GetSunRiseMinute());
+
+			float simulationSunsetHour = string.IsNullOrEmpty (button.GetSunSetHour()) ? 0F : float.Parse (button.GetSunSetHour());
+			float simulationSunsetMinute = string.IsNullOrEmpty (button.GetSunSetMinute()) ? 0F : float.Parse (button.GetSunSetMinute());
+
+			if(simulationSunriseHour+simulationSunriseMinute/60 >= simulationSunsetHour+simulationSunsetMinute/60)
+				return new KeyValuePair<bool, string> (false, "Sunrise cannot be <= to Sunset.");
+			
+			if(simulationSunriseHour+simulationSunriseMinute/60 > 24)
+				return new KeyValuePair<bool, string> (false, "Sunrise cannot be after 24h.");
+
+			if(simulationSunsetHour+simulationSunsetMinute/60 > 24)
+				return new KeyValuePair<bool, string> (false, "Sunrise cannot be after 24h.");
+
+			string[] timeAndTemperaturesStrings = button.GetTimeAndTemperature().Split(';');
+			Dictionary<float, float> timeAndTemperature = new Dictionary<float, float> ();
+			for (int i = 0; i < timeAndTemperaturesStrings.Length; ++i)
+			{
+				float hour = float.Parse (timeAndTemperaturesStrings[i].Split(':')[0]);
+				float temperature = float.Parse (timeAndTemperaturesStrings[i].Split(':')[1]);
+
+				if(i == 0 && dayNumber == 0 && _simulationTimeHour+_simulationTimeMinute/60 < hour)
+					return new KeyValuePair<bool, string> (false, "Current simulation time happening before first time/temperature pair ("+hour+"h).");
+				else if(i == 0 && dayNumber != 0)
+				{
+					float time = 24F;
+					float offset = lastPair.Value;
+					float slope = (temperature - lastPair.Value)/(time + hour - lastPair.Key);
+					float normalizedTime = (time - lastPair.Key);
+					previousWeather.GetTimeAndTemperatures().Add(time, (offset + slope * normalizedTime));
+					
+					timeAndTemperature.Add(0, (offset + slope * normalizedTime));
+				}
+
+				lastPair = new KeyValuePair<float, float>(hour, temperature);
+				timeAndTemperature.Add (hour, temperature);
+			}
+
+			previousWeather = new Weather (simulationSunriseHour, simulationSunriseMinute, simulationSunsetHour, simulationSunsetMinute, timeAndTemperature);
+			m_controller.AddSimulationWeather(previousWeather);		
+			m_controller.SetCurrentTime(_simulationTimeHour, _simulationTimeMinute);
+			++dayNumber;
+		}
+		return new KeyValuePair<bool, string> (true, "");
 	}
 }
