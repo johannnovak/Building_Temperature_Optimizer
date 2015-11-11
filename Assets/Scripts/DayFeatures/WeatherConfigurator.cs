@@ -66,7 +66,6 @@ public class WeatherConfigurator : MonoBehaviour {
 						previousWeather.GetTimeAndTemperatures().Add(time, (offset + slope * normalizedTime));
 
 						timeAndTemperature.Add(0, (offset + slope * normalizedTime));
-
 					}
 
 					lastPair = new KeyValuePair<float, float>(hour, temperature);

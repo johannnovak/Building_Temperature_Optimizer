@@ -64,7 +64,7 @@ public class SunMoonOrbiting : MonoBehaviour {
 			float elapsedTime = 0;
 
 			/* time > sunset */
-			if(m_currentTimeHour >= 12)
+			if(m_currentTimeHour >= _weather.GetSunSetHour()+_weather.GetSunSetMinute()/60)
 				elapsedTime = m_dayTimeSecond + (m_currentTimeHour*3600+m_currentTimeMinute*60) - (_weather.GetSunSetHour()*3600+_weather.GetSunSetMinute()*60);
 			else /* time < sunrise */
 				elapsedTime = (m_currentTimeHour*3600+m_currentTimeMinute*60) - (_weather.GetSunRiseHour()*3600+_weather.GetSunRiseMinute()*60);

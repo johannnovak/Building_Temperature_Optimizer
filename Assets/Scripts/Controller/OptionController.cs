@@ -24,6 +24,12 @@ public class OptionController : MonoBehaviour {
 	public InputField m_simulationSunSetHourInputField;
 	public InputField m_simulationSunSetMinuteInputField;
 	public InputField m_simulationTemperatures;
+	
+	//public StaticWeatherUpdaterButton[] m_weatherButtons;
+
+	private void Start()
+	{
+	}
 
 	public void UpdateUIFromDropDownValue(int _value)
 	{
@@ -58,18 +64,10 @@ public class OptionController : MonoBehaviour {
 		/* Dynamic search. */
 		if (m_dropdownConfigurationStyle.value == 0) 
 		{
-			string city = m_cityInputField.text;
-			if (string.IsNullOrEmpty (city))
-			{
-				configurationOK = false;
-				problemDesc = "Empty City InputField.";
-			}
-			else
-			{
-				KeyValuePair<bool, string> pair = GetComponent<WeatherConfigurator> ().RequestOnlineWeather (city, simulationTimeHour, simulationTimeMinute, simulationDurationHour, simulationDurationMinute);
-				configurationOK &= pair.Key;
-				problemDesc = pair.Value;
-			}
+			string city = string.IsNullOrEmpty (m_cityInputField.text) ? "Belfort" : m_cityInputField.text;
+			KeyValuePair<bool, string> pair = GetComponent<WeatherConfigurator> ().RequestOnlineWeather (city, simulationTimeHour, simulationTimeMinute, simulationDurationHour, simulationDurationMinute);
+			configurationOK &= pair.Key;
+			problemDesc = pair.Value;
 		}
 		else /* Static input of values. */
 		{
