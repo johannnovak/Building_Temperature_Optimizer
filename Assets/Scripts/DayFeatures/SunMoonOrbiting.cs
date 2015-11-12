@@ -3,9 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class SunMoonOrbiting : MonoBehaviour {
-
-	public bool m_mockTest;
-
+	
 	private int m_currentTimeDay;
 	public float m_currentTimeHour;
 	public float m_currentTimeMinute;
@@ -23,8 +21,10 @@ public class SunMoonOrbiting : MonoBehaviour {
 	private float m_dayTimeSecond;
 	private float m_nightTimeSecond;
 
+	private bool m_orbiting;
+
 	void Start () {
-		if (m_mockTest) 
+		/*if (m_mockTest) 
 		{
 			Dictionary<float, float> timeAndTemperature = new Dictionary<float, float> ();
 			timeAndTemperature.Add (0, 10);
@@ -36,7 +36,8 @@ public class SunMoonOrbiting : MonoBehaviour {
 
 			Weather w = new Weather (m_sunRiseHour, m_sunRiseMinute, m_sunSetHour, m_sunSetMinute, timeAndTemperature);
 			ComputeDayTime (w);
-		}
+		}*/
+		m_orbiting = false;
 	}
 
 	public void ComputeDayTime(Weather _weather)
@@ -47,7 +48,7 @@ public class SunMoonOrbiting : MonoBehaviour {
 		
 		ComputeFirstOrbitRotation (_weather);
 		
-		GetComponent<SimulationTimeTempUpdater> ().UpdateTimeAndTemperature (m_currentTimeHour, m_currentTimeMinute, SimulationController.GetCurrentTemperature(m_currentTimeDay, m_currentTimeHour, m_currentTimeMinute, m_currentTimeSeconds));
+		GetComponent<TimeTempManager>().UpdateListeners(m_currentTimeHour, m_currentTimeMinute, m_currentTimeSeconds, SimulationController.GetCurrentTemperature(m_currentTimeDay, m_currentTimeHour, m_currentTimeMinute, m_currentTimeSeconds));
 	}
 
 	private void ComputeFirstOrbitRotation(Weather _weather)
@@ -77,41 +78,44 @@ public class SunMoonOrbiting : MonoBehaviour {
 		transform.GetChild (1).LookAt (Vector3.zero);
 	}
 
+	public void StartOrbiting()
+	{
+		m_orbiting = true;
+	}
 
 	void Update () {
-		float updatedTime = Time.deltaTime * m_timeSpeed;
-		m_currentTimeSeconds += updatedTime;
-		if(m_currentTimeSeconds >= 60)
-		{
-			++m_currentTimeMinute;
-			m_currentTimeSeconds %= 60;
-			
-			if (m_currentTimeMinute == 60) 
-			{
-				++m_currentTimeHour;
-				m_currentTimeMinute = 0;
+		if (m_orbiting) {
+			float updatedTime = Time.deltaTime * m_timeSpeed;
+			m_currentTimeSeconds += updatedTime;
+			if (m_currentTimeSeconds >= 60) {
+				++m_currentTimeMinute;
+				m_currentTimeSeconds %= 60;
+				
+				if (m_currentTimeMinute == 60) {
+					++m_currentTimeHour;
+					m_currentTimeMinute = 0;
+				}
+
+				if (m_currentTimeHour == 24) {
+					++m_currentTimeDay;
+					m_currentTimeHour = 0;
+				}
+				GetComponent<TimeTempManager> ().UpdateListeners (m_currentTimeHour, m_currentTimeMinute, m_currentTimeSeconds, SimulationController.GetCurrentTemperature (m_currentTimeDay, m_currentTimeHour, m_currentTimeMinute, m_currentTimeSeconds));
 			}
 
-			if(m_currentTimeHour == 24)
-			{
-				++m_currentTimeDay;
-				m_currentTimeHour = 0;
-			}
-			GetComponent<SimulationTimeTempUpdater>().UpdateTimeAndTemperature (m_currentTimeHour, m_currentTimeMinute, SimulationController.GetCurrentTemperature(m_currentTimeDay, m_currentTimeHour, m_currentTimeMinute, m_currentTimeSeconds));
+			float deltaAngle = 0;
+			if (transform.rotation.eulerAngles.x < 180)
+				deltaAngle = (updatedTime * 180F) / m_dayTimeSecond;
+			else
+				deltaAngle = (updatedTime * 180F) / m_nightTimeSecond;
+
+			float modAngle = deltaAngle % 360;
+
+			transform.RotateAround (Vector3.zero, Vector3.right, modAngle);
+
+			transform.GetChild (0).LookAt (Vector3.zero);
+			transform.GetChild (1).LookAt (Vector3.zero);
 		}
-
-		float deltaAngle = 0;
-		if(transform.rotation.eulerAngles.x < 180)
-			deltaAngle = (updatedTime * 180F)/ m_dayTimeSecond;
-		else
-			deltaAngle = (updatedTime * 180F)/ m_nightTimeSecond;
-
-		float modAngle = deltaAngle%360;
-
-		transform.RotateAround(Vector3.zero, Vector3.right, modAngle);
-
-		transform.GetChild (0).LookAt (Vector3.zero);
-		transform.GetChild (1).LookAt (Vector3.zero);
 	}
 
 	public void SetCurrentTime(float _currentTimeHour, float _currentTimeMinute)

@@ -1,27 +1,34 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Floor : MonoBehaviour {
 
-	private Room[] m_rooms;
+	private RoomContainer[] m_roomContainers;
 
 	public void Initialize()
 	{	
-		m_rooms = new Room[transform.childCount];
-		for (int i = 0; i < m_rooms.Length; ++i)
+		List<RoomContainer> roomContainers = new List<RoomContainer> ();
+		for (int i = 0; i < transform.GetChild(0).childCount; ++i)
 		{
-			m_rooms[i] = transform.GetChild (i).gameObject.GetComponent<Room> ();
-			m_rooms[i].Initialize();
+			GameObject buildingObject = transform.GetChild(0).GetChild(i).gameObject;
+			if(buildingObject.tag.Equals("room"))
+			{
+				RoomContainer roomContainer = buildingObject.GetComponent<RoomContainer> ();
+				roomContainer.Initialize();
+				roomContainers.Add(roomContainer);
+			}
 		}
+		m_roomContainers = roomContainers.ToArray();
 	}
 
 	// Use this for initialization
 	void Start () {
 	}
 
-	public Room[] GetRooms()
+	public RoomContainer[] GetRooms()
 	{
-		return m_rooms;
+		return m_roomContainers;
 	}
 
 	public override string ToString ()
@@ -29,9 +36,9 @@ public class Floor : MonoBehaviour {
 		string display = "";
 
 		display += "\n   Floor " + name;
-		display += "\n Composed of "+m_rooms.Length+" rooms :";
+		display += "\n Composed of "+m_roomContainers.Length+" rooms :";
 		display += "\n---------------------------------------";
-		foreach (Room r in m_rooms)
+		foreach (RoomContainer r in m_roomContainers)
 			display += r.ToString();
 		display += "\n---------------------------------------";
 

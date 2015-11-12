@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Weather : MonoBehaviour {
+public class Weather{
 	
 	private float m_sunRiseHour;
 	private float m_sunRiseMinute;

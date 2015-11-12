@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class Room : MonoBehaviour {
@@ -24,6 +24,21 @@ public class Room : MonoBehaviour {
 	private void Start()
 	{
 
+	}
+
+	public float GetWidth()
+	{
+		return m_width;
+	}
+
+	public float GetLength()
+	{
+		return m_length;
+	}
+
+	public float GetHeight()
+	{
+		return m_height;
 	}
 
 	public override string ToString()

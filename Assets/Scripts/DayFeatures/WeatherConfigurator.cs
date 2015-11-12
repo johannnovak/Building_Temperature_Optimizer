@@ -18,7 +18,6 @@ public class WeatherConfigurator : MonoBehaviour {
 
 	public KeyValuePair<bool,string> RequestOnlineWeather(string _city, float _simulationTimeHour, float _simulationTimeMinute, float _simulationDurationHour, float _simulationDurationMinute, ref Text _textConfigureDescription)
 	{
-		Debug.Log ("dfsdfsdfsf");
 		_textConfigureDescription.text = "Requesting worldweatheronline.com...";
 		string json = GetJSONFromWebRequest ("http://api.worldweatheronline.com/free/v2/weather.ashx?q=" + _city + "&format=json&num_of_days=10&date=today&key=b1fbba3aff3f713681d871adf0f99");
 
