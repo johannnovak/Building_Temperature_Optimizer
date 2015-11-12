@@ -17,8 +17,61 @@ public class SimulationController : MonoBehaviour {
 	public GameObject m_world;
 	public SunMoonOrbiting m_sunMoonOrbiting;
 
+	public bool m_testEnabled;
+
 	// Use this for initialization
 	void Start () {
+		if (m_testEnabled)
+		{
+			m_simulationHour = 12;
+			m_simulationMinute = 0;
+
+			Dictionary<float, float> timeAndTemperature = new Dictionary<float, float> ();
+			timeAndTemperature.Add (0, 10);
+			timeAndTemperature.Add (5, 12);
+			timeAndTemperature.Add (8, 13);
+			timeAndTemperature.Add (12, 15);
+			timeAndTemperature.Add (18, 14);
+			timeAndTemperature.Add (24, 9);
+			
+			Weather w = new Weather (6, 0, 18, 0, timeAndTemperature);
+			AddSimulationWeather(w);
+
+			timeAndTemperature = new Dictionary<float, float> ();
+			timeAndTemperature.Add (0, 10);
+			timeAndTemperature.Add (5, 12);
+			timeAndTemperature.Add (8, 13);
+			timeAndTemperature.Add (12, 15);
+			timeAndTemperature.Add (18, 14);
+			timeAndTemperature.Add (24, 9);
+			
+			w = new Weather (6, 0, 18, 0, timeAndTemperature);
+			AddSimulationWeather(w);
+			
+			timeAndTemperature = new Dictionary<float, float> ();
+			timeAndTemperature.Add (0, 10);
+			timeAndTemperature.Add (5, 12);
+			timeAndTemperature.Add (8, 13);
+			timeAndTemperature.Add (12, 15);
+			timeAndTemperature.Add (18, 14);
+			timeAndTemperature.Add (24, 9);
+			
+			w = new Weather (6, 0, 18, 0, timeAndTemperature);
+			AddSimulationWeather(w);
+			
+			timeAndTemperature = new Dictionary<float, float> ();
+			timeAndTemperature.Add (0, 10);
+			timeAndTemperature.Add (5, 12);
+			timeAndTemperature.Add (8, 13);
+			timeAndTemperature.Add (12, 15);
+			timeAndTemperature.Add (18, 14);
+			timeAndTemperature.Add (24, 9);
+			
+			w = new Weather (6, 0, 18, 0, timeAndTemperature);
+			AddSimulationWeather(w);
+
+			Go ();
+		}
 	}
 
 	public void Go()
@@ -41,7 +94,6 @@ public class SimulationController : MonoBehaviour {
 	public void AddSimulationWeather(Weather _weather)
 	{
 		m_simulationWeathers.Add (_weather);
-		Debug.Log (_weather);
 	}
 
 	public void SetCurrentTime(float _simulationHour, float _simulationMinute)

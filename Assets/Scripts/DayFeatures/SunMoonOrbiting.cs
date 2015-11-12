@@ -24,19 +24,6 @@ public class SunMoonOrbiting : MonoBehaviour {
 	private bool m_orbiting;
 
 	void Start () {
-		/*if (m_mockTest) 
-		{
-			Dictionary<float, float> timeAndTemperature = new Dictionary<float, float> ();
-			timeAndTemperature.Add (0, 10);
-			timeAndTemperature.Add (5, 12);
-			timeAndTemperature.Add (8, 13);
-			timeAndTemperature.Add (12, 15);
-			timeAndTemperature.Add (18, 14);
-			timeAndTemperature.Add (23, 9);
-
-			Weather w = new Weather (m_sunRiseHour, m_sunRiseMinute, m_sunSetHour, m_sunSetMinute, timeAndTemperature);
-			ComputeDayTime (w);
-		}*/
 		m_orbiting = false;
 	}
 
@@ -47,7 +34,7 @@ public class SunMoonOrbiting : MonoBehaviour {
 		m_nightTimeSecond = (24 - dayTimeHour) * 3600;
 		
 		ComputeFirstOrbitRotation (_weather);
-		
+
 		GetComponent<TimeTempManager>().UpdateListeners(m_currentTimeHour, m_currentTimeMinute, m_currentTimeSeconds, SimulationController.GetCurrentTemperature(m_currentTimeDay, m_currentTimeHour, m_currentTimeMinute, m_currentTimeSeconds));
 	}
 
