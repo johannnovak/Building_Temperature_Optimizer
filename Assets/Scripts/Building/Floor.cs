@@ -26,7 +26,7 @@ public class Floor : MonoBehaviour {
 	void Start () {
 	}
 
-	public RoomContainer[] GetRooms()
+	public RoomContainer[] GetRoomContainers()
 	{
 		return m_roomContainers;
 	}

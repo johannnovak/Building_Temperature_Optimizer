@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -7,7 +8,10 @@ public class SelectionController : MonoBehaviour {
 	
 	public Camera m_camera;
 
+	public ConfigurationController m_configurationController;
+
 	public GameObject m_panelRoomInfo;
+	public InputFieldTabManager m_tabManager;
 	public InputField m_inputfieldObjectiveTemperature;
 	public InputField m_inputfieldDeliveredEnergy;
 
@@ -45,8 +49,8 @@ public class SelectionController : MonoBehaviour {
 								selectedObject.GetComponent<MeshRenderer>().materials = new Material[0];
 							m_selectedObjects.Clear();
 							
-							m_inputfieldObjectiveTemperature.text = string.Empty;
-							m_inputfieldDeliveredEnergy.text = string.Empty;
+							m_inputfieldObjectiveTemperature.text = "";
+							m_inputfieldDeliveredEnergy.text = "";
 						}
 						else /* Room not inside => list cleared + add new room. */
 						{
@@ -64,14 +68,16 @@ public class SelectionController : MonoBehaviour {
 								m_selectedObjects.Add(roomObject);
 							}
 
-							m_inputfieldObjectiveTemperature.text = containerTransform.gameObject.GetComponent<RoomContainer>().GetObjectiveTemperature().ToString();
-							m_inputfieldDeliveredEnergy.text = containerTransform.gameObject.GetComponent<RoomContainer>().GetDeliveredEnergy().ToString();
+							/* Updates the inputfields. */
+							float temp = containerTransform.gameObject.GetComponent<RoomContainer>().GetObjectiveTemperature();
+							float energy = containerTransform.gameObject.GetComponent<RoomContainer>().GetDeliveredEnergy();
+							m_inputfieldObjectiveTemperature.text = (float.IsNaN(temp) ? "" : temp.ToString());
+							m_inputfieldDeliveredEnergy.text = (float.IsNaN(energy) ? "" : energy.ToString());
 						}
 					}
 					else /* No room selected => add room. */
 					{
 						Transform containerTransform = o.transform.parent;
-						Debug.Log(containerTransform.gameObject.GetComponent<RoomContainer>().GetObjectiveTemperature()+"/"+containerTransform.gameObject.GetComponent<RoomContainer>().GetDeliveredEnergy());
 						for(int i = 0; i < containerTransform.childCount; ++i)
 						{
 							GameObject roomObject = containerTransform.GetChild(i).gameObject;
@@ -79,14 +85,22 @@ public class SelectionController : MonoBehaviour {
 							roomObject.GetComponent<Renderer>().material = m_selectedMaterial;
 							m_selectedObjects.Add(roomObject);
 						}
-						
-						m_inputfieldObjectiveTemperature.text = containerTransform.gameObject.GetComponent<RoomContainer>().GetObjectiveTemperature().ToString();
-						m_inputfieldDeliveredEnergy.text = containerTransform.gameObject.GetComponent<RoomContainer>().GetDeliveredEnergy().ToString();
+
+						/* Updates the inputfields. */
+						float temp = containerTransform.gameObject.GetComponent<RoomContainer>().GetObjectiveTemperature();
+						float energy = containerTransform.gameObject.GetComponent<RoomContainer>().GetDeliveredEnergy();
+						m_inputfieldObjectiveTemperature.text = (float.IsNaN(temp) ? "" : temp.ToString());
+						m_inputfieldDeliveredEnergy.text = (float.IsNaN(energy) ? "" : energy.ToString());
 					}
 
 					/* Shows menu when clicked. */
 					if(m_selectedObjects.Count > 0)
+					{
+						m_tabManager.ResetIndex();
 						m_panelRoomInfo.SetActive(true);
+						EventSystem.current.SetSelectedGameObject(m_inputfieldObjectiveTemperature.gameObject, null);
+						m_inputfieldObjectiveTemperature.OnPointerClick(new PointerEventData(EventSystem.current));
+					}
 					else
 						m_panelRoomInfo.SetActive(false);
 				}
@@ -96,11 +110,27 @@ public class SelectionController : MonoBehaviour {
 	
 	public void UpdateObjectiveTemperature(string _temperature)
 	{
-		m_selectedObjects.ToArray () [0].transform.parent.gameObject.GetComponent<RoomContainer> ().SetObjectiveTemperature (float.Parse(_temperature));
+		RoomContainer c = m_selectedObjects.ToArray () [0].transform.parent.gameObject.GetComponent<RoomContainer> ();
+
+		if (float.IsNaN(c.GetObjectiveTemperature()) && !float.IsNaN(c.GetDeliveredEnergy())) 
+		{
+			m_configurationController.UpdateConfiguredRoomContainers(c);
+		}
+		float temperature;
+		float.TryParse (_temperature, out temperature);
+		c.SetObjectiveTemperature (temperature);
 	}
 	
 	public void UpdateDeliveredEnergy(string _energy)
 	{
-		m_selectedObjects.ToArray () [0].transform.parent.gameObject.GetComponent<RoomContainer> ().SetDeliveredEnergy(float.Parse(_energy));
+		RoomContainer c = m_selectedObjects.ToArray () [0].transform.parent.gameObject.GetComponent<RoomContainer> ();
+
+		if (!float.IsNaN(c.GetObjectiveTemperature()) && float.IsNaN(c.GetDeliveredEnergy())) 
+		{
+			m_configurationController.UpdateConfiguredRoomContainers(c);
+		}
+		float energy;
+		float.TryParse (_energy, out energy);
+		c.SetDeliveredEnergy(energy);
 	}
 }

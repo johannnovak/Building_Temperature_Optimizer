@@ -3,18 +3,85 @@ using System.Collections;
 
 public class CameraHandling : MonoBehaviour {
 
-	private float m_rotationX;
-	private float m_rotationY;
+	private Camera m_camera;
+	
+	private Vector3 mouseOrigin;
+	private bool m_isRotating;
+	private bool m_isTranslating;
+	public float m_xyTranslationSpeed;
+	public float m_zTranslationSpeed;
+	public float m_rotatingSpeed;
 
+
+	private void Start()
+	{
+		m_camera = GetComponent<Camera> ();
+	}
 
 	// Update is called once per frame
 	void Update () {
 		/* Computes the X and Y rotation from the current device used. */
-		m_rotationY  = Input.GetAxis ("Mouse X");
-		m_rotationX += Input.GetAxis ("Mouse Y");
+		float xAxisValue = Input.GetAxis("Horizontal");
+		float zAxisValue = Input.GetAxis("Vertical");
+		float mouseWheelValue = Input.GetAxis ("Mouse ScrollWheel");
+			
+		if (Input.GetMouseButtonDown(1))
+		{
+			/* Right click */
+			m_isRotating = true;
+			mouseOrigin = Input.mousePosition;
+		}
 		
-		m_rotationY += transform.localEulerAngles.y;
+		if (Input.GetMouseButtonDown(2))
+		{
+			/* Middle click */
+			m_isTranslating = true;
+			mouseOrigin = Input.mousePosition;
+		}
+		
+		if (!Input.GetMouseButton (1))
+			m_isRotating = false;
+		if (!Input.GetMouseButton (2))
+			m_isTranslating = false;
+		
+		/* Translation with keys */
+		transform.Translate(new Vector3 (xAxisValue, zAxisValue, 0.0f));
+		
+		/* Translation with mouse */
+		TranslateIfPossible(m_isTranslating, mouseOrigin);
 
-		transform.localEulerAngles = new Vector3(-m_rotationX, m_rotationY, 0);
+		/* Perspective y management */
+		transform.Translate(new Vector3(0, 0, m_zTranslationSpeed * mouseWheelValue));
+		RotateCameraIfPossible(m_isRotating, mouseOrigin);	
+
 	}
+	
+	private void TranslateIfPossible(bool _isTranslating, Vector3 _mouseOrigin)
+	{
+		if (_isTranslating)
+			TranslateCamera (_mouseOrigin);
+	}
+	
+	private void TranslateCamera(Vector3 _mouseOrigin)
+	{
+		Vector3 pos = m_camera.ScreenToViewportPoint(-(Input.mousePosition - _mouseOrigin));
+		Vector3 move = new Vector3(pos.x * m_xyTranslationSpeed, pos.y * m_xyTranslationSpeed, 0);
+		
+		transform.Translate(move, Space.Self);	
+	}
+
+	private void RotateCameraIfPossible(bool _isRotating, Vector3 _mouseOrigin)
+	{
+		if (_isRotating)
+			RotateCamera(_mouseOrigin);
+	}
+
+	private void RotateCamera(Vector3 _mouseOrigin)
+	{
+		Vector3 pos = m_camera.ScreenToViewportPoint((Input.mousePosition - _mouseOrigin));
+		
+		transform.RotateAround(transform.position, transform.right, -pos.y * m_rotatingSpeed);
+		transform.RotateAround(transform.position, Vector3.up, pos.x * m_rotatingSpeed);
+	}
+
 }

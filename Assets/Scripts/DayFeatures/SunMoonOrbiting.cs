@@ -64,10 +64,22 @@ public class SunMoonOrbiting : MonoBehaviour {
 		transform.GetChild (0).LookAt (Vector3.zero);
 		transform.GetChild (1).LookAt (Vector3.zero);
 	}
-
+	
 	public void StartOrbiting()
 	{
 		m_orbiting = true;
+	}
+	
+	public void StopOrbiting()
+	{
+		m_orbiting = false;
+	}
+
+	public void ResetOrbit()
+	{
+		Quaternion q = new Quaternion ();
+		q.eulerAngles = new Vector3 (0, 0, 0);
+		transform.rotation = q;
 	}
 
 	void Update () {

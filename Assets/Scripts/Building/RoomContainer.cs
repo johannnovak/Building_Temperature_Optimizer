@@ -13,8 +13,8 @@ public class RoomContainer : MonoBehaviour {
 	// Use this for initialization
 	public void Initialize() {
 		m_volume = 0;
-		m_objectiveTemperature = 0;
-		m_deliveredEnergy = 0;
+		m_objectiveTemperature = float.NaN;
+		m_deliveredEnergy = float.NaN;
 
 		m_rooms = new Room[transform.childCount];
 

@@ -8,6 +8,8 @@ public class SimulationController : MonoBehaviour {
 
 	public GameObject m_menuPanel;
 	public GameObject m_simulationPanel;
+	public GameObject m_selectionController;
+	public GameObject m_configurationController;
 
 	private static List<Weather> m_simulationWeathers = new List<Weather>();
 
@@ -72,6 +74,11 @@ public class SimulationController : MonoBehaviour {
 
 			Go ();
 		}
+		else
+		{
+			m_configurationController.SetActive(false);
+			m_selectionController.SetActive(false);
+		}
 	}
 
 	public void Go()
@@ -79,6 +86,8 @@ public class SimulationController : MonoBehaviour {
 		m_world.SetActive (true);
 		m_menuPanel.SetActive (false);
 		m_simulationPanel.SetActive (true);
+		m_configurationController.SetActive(true);
+		m_selectionController.SetActive(true);
 
 		m_sunMoonOrbiting.SetCurrentTime(m_simulationHour, m_simulationMinute);
 		m_sunMoonOrbiting.ComputeDayTime (m_simulationWeathers.ToArray()[0]);
