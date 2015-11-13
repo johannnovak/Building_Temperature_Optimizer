@@ -44,4 +44,10 @@ public class Floor : MonoBehaviour {
 
 		return display;
 	}
+
+	public void ResetFloor()
+	{
+		foreach (RoomContainer c in m_roomContainers)
+			c.ResetRoomContainer ();
+	}
 }

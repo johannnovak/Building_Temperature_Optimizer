@@ -72,7 +72,7 @@ public class SimulationController : MonoBehaviour {
 			w = new Weather (6, 0, 18, 0, timeAndTemperature);
 			AddSimulationWeather(w);
 
-			Go ();
+			GoConfig();
 		}
 		else
 		{
@@ -81,7 +81,7 @@ public class SimulationController : MonoBehaviour {
 		}
 	}
 
-	public void Go()
+	public void GoConfig()
 	{
 		m_world.SetActive (true);
 		m_menuPanel.SetActive (false);
@@ -93,11 +93,6 @@ public class SimulationController : MonoBehaviour {
 		m_sunMoonOrbiting.ComputeDayTime (m_simulationWeathers.ToArray()[0]);
 
 		Debug.Log ("Starting simulation with time : " + m_simulationHour + ":" + m_simulationMinute);
-	}
-
-	// Update is called once per frame
-	void Update () {
-
 	}
 
 	public void AddSimulationWeather(Weather _weather)
@@ -120,5 +115,10 @@ public class SimulationController : MonoBehaviour {
 	public void QuitApplication()
 	{
 		Application.Quit ();
+	}
+
+	public void ResetSimulation()
+	{
+		m_simulationWeathers.Clear ();
 	}
 }

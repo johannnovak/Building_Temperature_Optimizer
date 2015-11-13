@@ -116,9 +116,12 @@ public class SelectionController : MonoBehaviour {
 		{
 			m_configurationController.UpdateConfiguredRoomContainers(c);
 		}
-		float temperature;
-		float.TryParse (_temperature, out temperature);
-		c.SetObjectiveTemperature (temperature);
+		if (!string.IsNullOrEmpty (_temperature)) 
+		{
+			float temperature;
+			float.TryParse (_temperature, out temperature);
+			c.SetObjectiveTemperature (temperature);
+		}
 	}
 	
 	public void UpdateDeliveredEnergy(string _energy)
@@ -129,8 +132,17 @@ public class SelectionController : MonoBehaviour {
 		{
 			m_configurationController.UpdateConfiguredRoomContainers(c);
 		}
-		float energy;
-		float.TryParse (_energy, out energy);
-		c.SetDeliveredEnergy(energy);
+		if (!string.IsNullOrEmpty (_energy)) 
+		{
+			float energy;
+			float.TryParse (_energy, out energy);
+			c.SetDeliveredEnergy(energy);
+		}
 	}
+
+	public void ResetSelectionController()
+	{
+		foreach(GameObject selectedObject in m_selectedObjects)
+			selectedObject.GetComponent<MeshRenderer>().materials = new Material[0];
+		m_selectedObjects.Clear();	}
 }

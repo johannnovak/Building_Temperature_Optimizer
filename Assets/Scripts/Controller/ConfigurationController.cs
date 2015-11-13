@@ -57,4 +57,14 @@ public class ConfigurationController : MonoBehaviour {
 
 		roomContainerList.Remove (_container);
 	}
+
+	public void ResetConfigurationManager()
+	{
+		m_currentSelectedFloor = 0;
+		m_remainingRoomContainers = new Dictionary<int, List<RoomContainer>> ();
+		for(int i = 0; i < m_building.GetFloors().Length; ++i)
+		{
+			m_remainingRoomContainers.Add(i, new List<RoomContainer>(m_building.GetFloors()[i].GetRoomContainers()));
+		}
+	}
 }

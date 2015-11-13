@@ -3,8 +3,8 @@ using System.Collections;
 
 public class Wall : MonoBehaviour {
 
-	public Room m_room1;
-	public Room m_room2;
+	public RoomContainer m_room1;
+	public RoomContainer m_room2;
 
 	// Use this for initialization
 	void Start () {

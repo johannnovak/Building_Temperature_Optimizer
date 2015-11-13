@@ -62,4 +62,10 @@ public class Building : MonoBehaviour {
 	{
 		return m_floors;
 	}
+
+	public void ResetBuiding()
+	{
+		foreach (Floor f in m_floors)
+			f.ResetFloor ();
+	}
 }

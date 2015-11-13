@@ -67,4 +67,11 @@ public class RoomContainer : MonoBehaviour {
 
 		return display;
 	}
+
+	public void ResetRoomContainer()
+	{
+		m_objectiveTemperature = float.NaN;
+		m_deliveredEnergy = float.NaN;
+		m_volume = 0;
+	}
 }
