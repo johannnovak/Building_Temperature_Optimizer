@@ -8,13 +8,17 @@ public class RoomContainer : MonoBehaviour {
 	private float m_volume;
 
 	private float m_objectiveTemperature;
-	private float m_deliveredEnergy;
+	private float m_minDeliveredEnergy;
+	private float m_maxDeliveredEnergy;
+	private float m_currentDeliveredEnergy;
 
 	// Use this for initialization
 	public void Initialize() {
 		m_volume = 0;
 		m_objectiveTemperature = float.NaN;
-		m_deliveredEnergy = float.NaN;
+		m_minDeliveredEnergy = float.NaN;
+		m_maxDeliveredEnergy = float.NaN;
+		m_currentDeliveredEnergy = float.NaN;
 
 		m_rooms = new Room[transform.childCount];
 
@@ -46,15 +50,25 @@ public class RoomContainer : MonoBehaviour {
 	{
 		return m_objectiveTemperature;
 	}
-	
-	public void SetDeliveredEnergy(float _energy)
+
+	public float GetMinDeliveredEnergy()
 	{
-		m_deliveredEnergy = _energy;
+		return m_minDeliveredEnergy;
+	}
+
+	public float GetMaxDeliveredEnergy()
+	{
+		return m_maxDeliveredEnergy;
 	}
 	
-	public float GetDeliveredEnergy()
+	public void SetCurrentDeliveredEnergy(float _energy)
 	{
-		return m_deliveredEnergy;
+		m_currentDeliveredEnergy = _energy;
+	}
+	
+	public float GetCurrentDeliveredEnergy()
+	{
+		return m_currentDeliveredEnergy;
 	}
 
 	public override string ToString ()
@@ -71,7 +85,9 @@ public class RoomContainer : MonoBehaviour {
 	public void ResetRoomContainer()
 	{
 		m_objectiveTemperature = float.NaN;
-		m_deliveredEnergy = float.NaN;
+		m_currentDeliveredEnergy = float.NaN;
+		m_minDeliveredEnergy = float.NaN;
+		m_maxDeliveredEnergy = float.NaN;
 		m_volume = 0;
 	}
 }

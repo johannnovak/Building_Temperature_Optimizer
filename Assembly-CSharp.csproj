@@ -6,7 +6,7 @@
 	<ProductVersion>10.0.20506</ProductVersion>
 	<SchemaVersion>2.0</SchemaVersion>
 	<RootNamespace></RootNamespace>
-	<ProjectGuid>{881A2A7E-1BA3-2738-1D60-D0EFA974896A}</ProjectGuid>
+	<ProjectGuid>{013EC769-32A7-3FF5-7023-0CFC4FD63AFA}</ProjectGuid>
 	<OutputType>Library</OutputType>
 	<AppDesignerFolder>Properties</AppDesignerFolder>
 	<AssemblyName>Assembly-CSharp</AssemblyName>
@@ -45,6 +45,7 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\Building\Actionner.cs" />
      <Compile Include="Assets\Scripts\Building\Building.cs" />
      <Compile Include="Assets\Scripts\Building\Floor.cs" />
      <Compile Include="Assets\Scripts\Building\Room.cs" />
@@ -79,7 +80,7 @@
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll</HintPath>
  </Reference>
  <Reference Include="ICSharpCode.SharpZipLib">
- <HintPath>F:/jnovak/utbm/gi05d/TX52/Building_Temperature_Optimizer/Assets/Plugins/ICSharpCode.SharpZipLib.dll</HintPath>
+ <HintPath>F:/jnovak/utbm/gi05d/TX52/Building_Temperature_Optimizer_fix/Assets/Plugins/ICSharpCode.SharpZipLib.dll</HintPath>
  </Reference>
  <Reference Include="Mono.Cecil">
  <HintPath>C:/Program Files/Unity/Editor/Data/Managed/Mono.Cecil.dll</HintPath>

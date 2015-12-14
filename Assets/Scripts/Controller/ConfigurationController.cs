@@ -20,6 +20,7 @@ public class ConfigurationController : MonoBehaviour {
 		m_currentSelectedFloor = 0;
 		m_remainingRoomContainers = new Dictionary<int, List<RoomContainer>> ();
 		m_floorTotalRoomNb = new List<int> ();
+		m_building.Initialize ();
 		for(int i = 0; i < m_building.GetFloors().Length; ++i)
 		{
 			m_remainingRoomContainers.Add(i, new List<RoomContainer>(m_building.GetFloors()[i].GetRoomContainers()));
