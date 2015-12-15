@@ -18,13 +18,18 @@ public class Room : MonoBehaviour {
 
 		m_commandableActionners = new List<Actionner> ();
 		for (int i = 0; i < transform.childCount; ++i)
-			if (transform.GetChild (i).tag.Equals ("commandableActionner"))
+			if (transform.GetChild (i).tag.Equals ("commandableObject"))
 				m_commandableActionners.Add (transform.GetChild(i).gameObject.GetComponent<Actionner>());
 	}
 
 	private void Start()
 	{
 
+	}
+
+	public List<Actionner> GetCommandableActionnerList()
+	{
+		return m_commandableActionners;
 	}
 
 	public float GetWidth()

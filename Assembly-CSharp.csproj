@@ -60,6 +60,7 @@
      <Compile Include="Assets\Scripts\DayFeatures\TemperatureUpdater.cs" />
      <Compile Include="Assets\Scripts\DayFeatures\Weather.cs" />
      <Compile Include="Assets\Scripts\DayFeatures\WeatherConfigurator.cs" />
+     <Compile Include="Assets\Scripts\UI\ActionnerButtonHandler.cs" />
      <Compile Include="Assets\Scripts\UI\BuildingFloorDropdownCreator.cs" />
      <Compile Include="Assets\Scripts\UI\BuildingFloorFilterer.cs" />
      <Compile Include="Assets\Scripts\UI\BuildingFloorListener.cs" />

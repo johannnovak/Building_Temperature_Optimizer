@@ -17,6 +17,7 @@ public class InputFieldTabManager : MonoBehaviour {
 	private void OnGUI () {
 		//Debug.Log (Input.GetKeyDown(KeyCode.Tab) + " / " + m_currentIndex+ " / "+m_inputFields[m_currentIndex].isFocused);
 
+
 		if (Input.GetKeyDown(KeyCode.Tab) && m_inputFields[m_currentIndex].isFocused)
 		{
 			m_currentIndex = (m_currentIndex + 1)%m_inputFields.Length;

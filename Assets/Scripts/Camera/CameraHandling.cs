@@ -12,48 +12,52 @@ public class CameraHandling : MonoBehaviour {
 	public float m_zTranslationSpeed;
 	public float m_rotatingSpeed;
 
+	public bool m_canUseCamera;
 
 	private void Start()
 	{
 		m_camera = GetComponent<Camera> ();
+		m_canUseCamera = true;
 	}
 
 	// Update is called once per frame
 	void Update () {
-		/* Computes the X and Y rotation from the current device used. */
-		float xAxisValue = Input.GetAxis("Horizontal");
-		float zAxisValue = Input.GetAxis("Vertical");
-		float mouseWheelValue = Input.GetAxis ("Mouse ScrollWheel");
+		if (m_canUseCamera) 
+		{
+			/* Computes the X and Y rotation from the current device used. */
+			float xAxisValue = Input.GetAxis ("Horizontal");
+			float zAxisValue = Input.GetAxis ("Vertical");
+			float mouseWheelValue = Input.GetAxis ("Mouse ScrollWheel");
 			
-		if (Input.GetMouseButtonDown(1))
-		{
-			/* Right click */
-			m_isRotating = true;
-			mouseOrigin = Input.mousePosition;
-		}
+			if (Input.GetMouseButtonDown (1)) 
+			{
+				/* Right click */
+				m_isRotating = true;
+				mouseOrigin = Input.mousePosition;
+			}
 		
-		if (Input.GetMouseButtonDown(2))
-		{
-			/* Middle click */
-			m_isTranslating = true;
-			mouseOrigin = Input.mousePosition;
-		}
+			if (Input.GetMouseButtonDown (2)) 
+			{
+				/* Middle click */
+				m_isTranslating = true;
+				mouseOrigin = Input.mousePosition;
+			}
 		
-		if (!Input.GetMouseButton (1))
-			m_isRotating = false;
-		if (!Input.GetMouseButton (2))
-			m_isTranslating = false;
+			if (!Input.GetMouseButton (1))
+				m_isRotating = false;
+			if (!Input.GetMouseButton (2))
+				m_isTranslating = false;
 		
-		/* Translation with keys */
-		transform.Translate(new Vector3 (xAxisValue, zAxisValue, 0.0f));
+			/* Translation with keys */
+			transform.Translate (new Vector3 (xAxisValue, zAxisValue, 0.0f));
 		
-		/* Translation with mouse */
-		TranslateIfPossible(m_isTranslating, mouseOrigin);
+			/* Translation with mouse */
+			TranslateIfPossible (m_isTranslating, mouseOrigin);
 
-		/* Perspective y management */
-		transform.Translate(new Vector3(0, 0, m_zTranslationSpeed * mouseWheelValue));
-		RotateCameraIfPossible(m_isRotating, mouseOrigin);	
-
+			/* Perspective y management */
+			transform.Translate (new Vector3 (0, 0, m_zTranslationSpeed * mouseWheelValue));
+			RotateCameraIfPossible (m_isRotating, mouseOrigin);	
+		}
 	}
 	
 	private void TranslateIfPossible(bool _isTranslating, Vector3 _mouseOrigin)
@@ -82,6 +86,16 @@ public class CameraHandling : MonoBehaviour {
 		
 		transform.RotateAround(transform.position, transform.right, -pos.y * m_rotatingSpeed);
 		transform.RotateAround(transform.position, Vector3.up, pos.x * m_rotatingSpeed);
+	}
+	
+	public void StopUsingCamera()
+	{
+		m_canUseCamera = false;
+	}
+	
+	public void StartUsingCamera()
+	{
+		m_canUseCamera = true;
 	}
 
 }

@@ -6,6 +6,12 @@ public class Actionner : MonoBehaviour {
 	private float m_minDeliveredEnergy;
 	private float m_maxDeliveredEnergy;
 
+	private void Start()
+	{
+		m_minDeliveredEnergy = float.NaN;
+		m_maxDeliveredEnergy = float.NaN;
+	}
+
 	public float GetMinDeliveredEnergy()
 	{
 		return m_minDeliveredEnergy;
