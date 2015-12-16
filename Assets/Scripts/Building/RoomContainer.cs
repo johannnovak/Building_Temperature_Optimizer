@@ -71,9 +71,19 @@ public class RoomContainer : MonoBehaviour {
 		return m_minDeliveredEnergy;
 	}
 
+	public void setMinDeliveredEnergy(float _energy)
+	{
+		m_minDeliveredEnergy = _energy;
+	}
+
 	public float GetMaxDeliveredEnergy()
 	{
 		return m_maxDeliveredEnergy;
+	}
+	
+	public void setMaxDeliveredEnergy(float _energy)
+	{
+		m_maxDeliveredEnergy = _energy;
 	}
 	
 	public void SetCurrentDeliveredEnergy(float _energy)

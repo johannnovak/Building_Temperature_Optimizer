@@ -26,7 +26,6 @@ public class ConfigurationController : MonoBehaviour {
 			m_remainingRoomContainers.Add(i, new List<RoomContainer>(m_building.GetFloors()[i].GetRoomContainers()));
 			m_floorTotalRoomNb.Add(m_building.GetFloors()[i].GetRoomContainers().Length);
 		}
-
 	}
 
 	private void Update()
