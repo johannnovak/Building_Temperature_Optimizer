@@ -4,27 +4,44 @@ using System.Collections.Generic;
 
 public class Room : MonoBehaviour {
 
-	private float m_width;
-	private float m_length;
-	private float m_height;
+	public float Width { get; private set;}
+	public float Height { get; private set;}
+	public float Depth { get; private set;}
+
+	public float Surface { get; private set;}
+	public float Volume { get; private set;}
+
+	private List<Wall> m_walls;
 
 	private List<Actionner> m_commandableActionners;
 
 	public void Initialize()
 	{
-		m_width = gameObject.GetComponent<MeshRenderer>().bounds.size.x;
-		m_length = gameObject.GetComponent<MeshRenderer>().bounds.size.y;
-		m_height = gameObject.GetComponent<MeshRenderer>().bounds.size.z;
+		Bounds colliderBoxBounds = GetComponent<BoxCollider> ().bounds;
+		Vector3 dimensions = colliderBoxBounds.max - colliderBoxBounds.min;
 
+		Width = dimensions.x;
+		Height = dimensions.y;
+		Depth = dimensions.z;
+
+		Surface = Width * Height;
+		Volume = Surface * Depth;
+
+		m_walls = new List<Wall> ();
 		m_commandableActionners = new List<Actionner> ();
 		for (int i = 0; i < transform.childCount; ++i)
 			if (transform.GetChild (i).tag.Equals ("commandableObject"))
 				m_commandableActionners.Add (transform.GetChild(i).gameObject.GetComponent<Actionner>());
 	}
 
-	private void Start()
+	public List<Wall> GetWalls()
 	{
+		return m_walls;
+	}
 
+	public void AddWall(Wall _wall)
+	{
+		m_walls.Add (_wall);
 	}
 
 	public List<Actionner> GetCommandableActionnerList()
@@ -32,29 +49,18 @@ public class Room : MonoBehaviour {
 		return m_commandableActionners;
 	}
 
-	public float GetWidth()
-	{
-		return m_width;
-	}
-
-	public float GetLength()
-	{
-		return m_length;
-	}
-
-	public float GetHeight()
-	{
-		return m_height;
-	}
-
 	public override string ToString()
 	{
 		string display = "";
 
-		display += "\n     Room - "+ name;
-		display += "\n width  = " + m_width;
-		display += "\n length = " + m_length;
-		display += "\n height = " + m_height;
+		display += "\nRoom - "+ name;
+		display += "\n width  = " + Width;
+		display += "\n height = " + Height;
+		display += "\n depth  = " + Depth;
+		display += "\nComposed of " + m_walls.ToArray ().Length + " walls :";
+		foreach (Wall w in m_walls)
+			display += w.ToString ();
+		display += "\nEndRoom";
 
 		return display;
 	}

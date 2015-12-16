@@ -5,23 +5,24 @@ using System.Collections.Generic;
 public class RoomContainer : MonoBehaviour {
 
 	private List<Room> m_rooms;
-	private float m_volume;
 
-	private float m_objectiveTemperature;
-	private float m_minDeliveredEnergy;
-	private float m_maxDeliveredEnergy;
-	private float m_currentDeliveredEnergy;
+	public float Volume { get; private set;}
+
+	public float ObjectiveTemperature { get; set;}
+	public float MinDeliveredEnergy {get; set;}
+	public float MaxDeliveredEnergy { get; set;}
+	public float CurrentDeliveredEnergy { get; set;}
 
 	private bool m_containsCommandableActionners;
 
 	// Use this for initialization
 	public void Initialize() {
 		m_rooms = new List<Room> ();
-		m_volume = 0;
-		m_objectiveTemperature = float.NaN;
-		m_minDeliveredEnergy = float.NaN;
-		m_maxDeliveredEnergy = float.NaN;
-		m_currentDeliveredEnergy = float.NaN;
+		Volume = 0;
+		ObjectiveTemperature = float.NaN;
+		MinDeliveredEnergy = float.NaN;
+		MaxDeliveredEnergy = float.NaN;
+		CurrentDeliveredEnergy = float.NaN;
 		
 		m_containsCommandableActionners = false;
 
@@ -48,71 +49,28 @@ public class RoomContainer : MonoBehaviour {
 
 	private void AddVolume(Room _room)
 	{
-		m_volume += (_room.GetLength()*_room.GetWidth()*_room.GetHeight());
-	}
-
-	public float GetRoomVolume()
-	{
-		return m_volume;
-	}
-	
-	public void SetObjectiveTemperature(float _temperature)
-	{
-		m_objectiveTemperature = _temperature;
-	}
-
-	public float GetObjectiveTemperature()
-	{
-		return m_objectiveTemperature;
-	}
-
-	public float GetMinDeliveredEnergy()
-	{
-		return m_minDeliveredEnergy;
-	}
-
-	public void setMinDeliveredEnergy(float _energy)
-	{
-		m_minDeliveredEnergy = _energy;
-	}
-
-	public float GetMaxDeliveredEnergy()
-	{
-		return m_maxDeliveredEnergy;
-	}
-	
-	public void setMaxDeliveredEnergy(float _energy)
-	{
-		m_maxDeliveredEnergy = _energy;
-	}
-	
-	public void SetCurrentDeliveredEnergy(float _energy)
-	{
-		m_currentDeliveredEnergy = _energy;
-	}
-	
-	public float GetCurrentDeliveredEnergy()
-	{
-		return m_currentDeliveredEnergy;
+		Volume += _room.Volume;
 	}
 
 	public override string ToString ()
 	{
 		string display = "";
 
-		display += "\nComposed of "+m_rooms.ToArray().Length+" room spaces.";
+		display += "\nRoom container : " + name;
+		display += "\n Composed of "+m_rooms.ToArray().Length+" room spaces.";
 		foreach (Room r in m_rooms)
 			display += r.ToString ();
+		display += "\nEndRoomContainer";
 
 		return display;
 	}
 
 	public void ResetRoomContainer()
 	{
-		m_objectiveTemperature = float.NaN;
-		m_currentDeliveredEnergy = float.NaN;
-		m_minDeliveredEnergy = float.NaN;
-		m_maxDeliveredEnergy = float.NaN;
-		m_volume = 0;
+		ObjectiveTemperature = float.NaN;
+		CurrentDeliveredEnergy = float.NaN;
+		MinDeliveredEnergy = float.NaN;
+		MaxDeliveredEnergy = float.NaN;
+		Volume = 0;
 	}
 }

@@ -20,6 +20,13 @@ public class Floor : MonoBehaviour {
 			}
 		}
 		m_roomContainers = roomContainers.ToArray();
+
+		GameObject wallsContainer = transform.GetChild (1).gameObject;
+		for(int i = 0; i < wallsContainer.transform.childCount; ++i)
+		{
+			Wall w = wallsContainer.transform.GetChild(i).GetComponent<Wall>();
+			w.Initialize();
+		}
 	}
 
 	// Use this for initialization

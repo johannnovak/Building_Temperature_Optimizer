@@ -186,7 +186,7 @@ public class SelectionController : MonoBehaviour {
 		}
 		
 		/* Updates the inputfields. */
-		float temp = containerTransform.gameObject.GetComponent<RoomContainer>().GetObjectiveTemperature();
+		float temp = containerTransform.gameObject.GetComponent<RoomContainer>().ObjectiveTemperature;
 		m_inputfieldObjectiveTemperature.text = (float.IsNaN(temp) ? "" : temp.ToString());
 
 		m_tabManager.ResetIndex ();
@@ -198,7 +198,7 @@ public class SelectionController : MonoBehaviour {
 		bool actionnersReadied = true;
 		foreach (Room r in _rc.GetRooms())
 			foreach (Actionner ac in r.GetCommandableActionnerList())
-				actionnersReadied &= (!float.IsNaN (ac.GetMinDeliveredEnergy()) && float.IsNaN (ac.GetMinDeliveredEnergy ()));
+				actionnersReadied &= ac.Prepared;
 		
 		return actionnersReadied;
 	}
@@ -207,76 +207,106 @@ public class SelectionController : MonoBehaviour {
 	{
 		bool actionnersReadied = ActionnerReadied (_rc);
 		
-		if (float.IsNaN(_rc.GetObjectiveTemperature()) && actionnersReadied) 
-		{
-			Debug.Log("oooooooooooooooooooook");
+		if (!float.IsNaN(_rc.ObjectiveTemperature) && actionnersReadied) 
 			m_configurationController.UpdateConfiguredRoomContainers(_rc);
-		}
 	}
 
 	public void UpdateObjectiveTemperature(string _temperature)
 	{
 		RoomContainer c = m_selectedObjects.ToArray () [0].transform.parent.gameObject.GetComponent<RoomContainer> ();
 
-		CheckRoomConfigured (c);
-
 		if (!string.IsNullOrEmpty (_temperature)) 
 		{
 			float temperature;
 			float.TryParse (_temperature, out temperature);
-			c.SetObjectiveTemperature (temperature);
+			c.ObjectiveTemperature = temperature;
 		}
+		else
+		{
+			m_inputfieldObjectiveTemperature.text = float.IsNaN(c.ObjectiveTemperature)?"":c.ObjectiveTemperature.ToString();
+		}
+		CheckRoomConfigured (c);
 	}
 	
 	public void UpdateMinDeliveredEnergy(string _energy)
 	{
 		RoomContainer c = m_selectedObjects.ToArray () [0].transform.parent.gameObject.GetComponent<RoomContainer> ();
-		
-		CheckRoomConfigured (c);
+		Actionner ac = GameObject.Find(m_selectedActionnerButton.transform.GetChild(0).GetComponent<Text>().text).GetComponent<Actionner>();
 
 		if (!string.IsNullOrEmpty (_energy)) 
 		{
-			Actionner ac = GameObject.Find(m_selectedActionnerButton.transform.GetChild(0).GetComponent<Text>().text).GetComponent<Actionner>();
 			RoomContainer rc = ac.transform.parent.parent.gameObject.GetComponent<RoomContainer>();
-			if(!float.IsNaN(rc.GetMinDeliveredEnergy()) && !float.IsNaN(ac.GetMinDeliveredEnergy()))
-				rc.setMinDeliveredEnergy(rc.GetMinDeliveredEnergy() - ac.GetMinDeliveredEnergy());
 
 			float energy;
 			float.TryParse (_energy, out energy);
-			ac.SetMinDeliveredEnergy(energy);
 
-			if(float.IsNaN(rc.GetMinDeliveredEnergy()))
-				rc.setMinDeliveredEnergy(ac.GetMinDeliveredEnergy());
+			if(float.IsNaN(ac.MaxDeliveredEnergy) || energy < ac.MaxDeliveredEnergy)
+			{
+				if(!float.IsNaN(rc.MinDeliveredEnergy) && !float.IsNaN(ac.MinDeliveredEnergy))
+					rc.MinDeliveredEnergy = rc.MinDeliveredEnergy - ac.MinDeliveredEnergy;
+
+				ac.MinDeliveredEnergy = energy;
+
+				if(float.IsNaN(rc.MinDeliveredEnergy))
+					rc.MinDeliveredEnergy = ac.MinDeliveredEnergy;
+				else
+					rc.MinDeliveredEnergy = rc.MinDeliveredEnergy + ac.MinDeliveredEnergy;
+
+				UpdateHeatIntervalText(rc.MinDeliveredEnergy, rc.MaxDeliveredEnergy);
+
+				if(!float.IsNaN(ac.MinDeliveredEnergy) && !float.IsNaN(ac.MaxDeliveredEnergy))
+					ac.Prepared = true;
+			}
 			else
-				rc.setMinDeliveredEnergy(rc.GetMinDeliveredEnergy() + ac.GetMinDeliveredEnergy());
-
-			UpdateHeatIntervalText(rc.GetMinDeliveredEnergy(), rc.GetMaxDeliveredEnergy());
+			{
+				m_inputfieldMinDeliveredEnergy.text = (float.IsNaN(ac.MinDeliveredEnergy))?"":ac.MinDeliveredEnergy.ToString();
+			}
 		}
+		else
+		{
+			m_inputfieldMinDeliveredEnergy.text = float.IsNaN(ac.MinDeliveredEnergy)?"":ac.MinDeliveredEnergy.ToString();
+		}
+		CheckRoomConfigured (c);
 	}
 
 	public void UpdateMaxDeliveredEnergy(string _energy)
 	{
 		RoomContainer c = m_selectedObjects.ToArray () [0].transform.parent.gameObject.GetComponent<RoomContainer> ();
+		Actionner ac = GameObject.Find(m_selectedActionnerButton.transform.GetChild(0).GetComponent<Text>().text).GetComponent<Actionner>();
 		
-		CheckRoomConfigured (c);
 		if (!string.IsNullOrEmpty (_energy)) 
 		{
-			Actionner ac = GameObject.Find(m_selectedActionnerButton.transform.GetChild(0).GetComponent<Text>().text).GetComponent<Actionner>();
 			RoomContainer rc = ac.transform.parent.parent.gameObject.GetComponent<RoomContainer>();
-			if(!float.IsNaN(rc.GetMaxDeliveredEnergy()) && !float.IsNaN(ac.GetMaxDeliveredEnergy()))
-				rc.setMaxDeliveredEnergy(rc.GetMaxDeliveredEnergy() - ac.GetMaxDeliveredEnergy());
-
 			float energy;
 			float.TryParse (_energy, out energy);
-			ac.SetMaxDeliveredEnergy(energy);
 			
-			if(float.IsNaN(rc.GetMaxDeliveredEnergy()))
-				rc.setMaxDeliveredEnergy(ac.GetMaxDeliveredEnergy());
+			if(float.IsNaN(ac.MinDeliveredEnergy) || energy > ac.MinDeliveredEnergy)
+			{
+				if(!float.IsNaN(rc.MaxDeliveredEnergy) && !float.IsNaN(ac.MaxDeliveredEnergy))
+					rc.MaxDeliveredEnergy = rc.MaxDeliveredEnergy - ac.MaxDeliveredEnergy;
+
+				ac.MaxDeliveredEnergy = energy;
+				
+				if(float.IsNaN(rc.MaxDeliveredEnergy))
+					rc.MaxDeliveredEnergy = ac.MaxDeliveredEnergy;
+				else
+					rc.MaxDeliveredEnergy = rc.MaxDeliveredEnergy + ac.MaxDeliveredEnergy;
+				
+				UpdateHeatIntervalText(rc.MinDeliveredEnergy, rc.MaxDeliveredEnergy);
+
+				if(!float.IsNaN(ac.MinDeliveredEnergy) && !float.IsNaN(ac.MaxDeliveredEnergy))
+					ac.Prepared = true;
+			}
 			else
-				rc.setMaxDeliveredEnergy(rc.GetMaxDeliveredEnergy() + ac.GetMaxDeliveredEnergy());
-			
-			UpdateHeatIntervalText(rc.GetMinDeliveredEnergy(), rc.GetMaxDeliveredEnergy());
+			{
+				m_inputfieldMaxDeliveredEnergy.text = (float.IsNaN(ac.MaxDeliveredEnergy))?"":ac.MaxDeliveredEnergy.ToString();
+			}
 		}
+		else
+		{
+			m_inputfieldMaxDeliveredEnergy.text = float.IsNaN(ac.MaxDeliveredEnergy)?"":ac.MaxDeliveredEnergy.ToString();
+		}
+		CheckRoomConfigured (c);
 	}
 
 	private void UpdateHeatIntervalText(float _minEnergy, float _maxEnergy)
@@ -308,8 +338,8 @@ public class SelectionController : MonoBehaviour {
 		m_panelHeatRangeInfo.transform.GetChild (0).GetChild (0).GetComponent<Text> ().text = "Actionner\n" + (m_selectedActionnerButton.transform.GetChild (0).GetComponent<Text> ().text);
 
 		Actionner ac = GameObject.Find(m_selectedActionnerButton.transform.GetChild(0).GetComponent<Text>().text).GetComponent<Actionner>();
-		float minEnergy = ac.GetMinDeliveredEnergy ();
-		float maxEnergy = ac.GetMaxDeliveredEnergy ();
+		float minEnergy = ac.MinDeliveredEnergy;
+		float maxEnergy = ac.MaxDeliveredEnergy;
 
 		m_inputfieldMinDeliveredEnergy.text = (float.IsNaN(minEnergy) ? "" : minEnergy.ToString());
 		m_inputfieldMaxDeliveredEnergy.text = (float.IsNaN(maxEnergy) ? "" : maxEnergy.ToString());
