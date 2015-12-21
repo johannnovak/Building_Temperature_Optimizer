@@ -1,15 +1,57 @@
 fileFormatVersion: 2
-guid: e8befacab4c1d4b4b9d2fe181ea1fce8
-timeCreated: 1450118859
+guid: df2a02902225d21408893047bc9f52de
+timeCreated: 1450732130
 licenseType: Free
 ModelImporter:
   serializedVersion: 18
   fileIDToRecycleName:
     100000: //RootNode
+    100002: Escalier_etage1__soletage2
+    100004: escalier_RDC
+    100006: Etage_1
+    100008: Etage_1_copie
+    100010: Etage_2
+    100012: Plafond_Etage_2
+    100014: RDC
+    100016: RDC_copie
+    100018: Sol_RDC
     400000: //RootNode
-    2300000: //RootNode
-    3300000: //RootNode
-    4300000: Cube
+    400002: Escalier_etage1__soletage2
+    400004: escalier_RDC
+    400006: Etage_1
+    400008: Etage_1_copie
+    400010: Etage_2
+    400012: Plafond_Etage_2
+    400014: RDC
+    400016: RDC_copie
+    400018: Sol_RDC
+    2300000: Escalier_etage1__soletage2
+    2300002: escalier_RDC
+    2300004: Etage_1
+    2300006: Etage_1_copie
+    2300008: Etage_2
+    2300010: Plafond_Etage_2
+    2300012: RDC
+    2300014: RDC_copie
+    2300016: Sol_RDC
+    3300000: Escalier_etage1__soletage2
+    3300002: escalier_RDC
+    3300004: Etage_1
+    3300006: Etage_1_copie
+    3300008: Etage_2
+    3300010: Plafond_Etage_2
+    3300012: RDC
+    3300014: RDC_copie
+    3300016: Sol_RDC
+    4300000: RDC_copie
+    4300002: Etage_1_copie
+    4300004: escalier_RDC
+    4300006: Escalier_etage1__soletage2
+    4300008: Plafond_Etage_2
+    4300010: Sol_RDC
+    4300012: Etage_2
+    4300014: Etage_1
+    4300016: RDC
     7400000: Default Take
     9500000: //RootNode
   materials:
