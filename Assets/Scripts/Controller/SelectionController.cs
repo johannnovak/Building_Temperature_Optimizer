@@ -73,13 +73,14 @@ public class SelectionController : MonoBehaviour {
 	}
 
 	// Update is called once per frame
-	void Update () {
+	void Update () {	
 		
 		if (m_canSelect && Input.GetMouseButtonDown(0))
 		{
 			/* Left click */
 			RaycastHit hitInfo = new RaycastHit();
-			bool hit = Physics.Raycast(m_camera.ScreenPointToRay(Input.mousePosition), out hitInfo);
+			Ray ray = m_camera.ScreenPointToRay(Input.mousePosition);
+			bool hit = Physics.Raycast(ray, out hitInfo, float.PositiveInfinity, m_camera.cullingMask);
 			if (hit) 
 			{
 				if (hitInfo.transform.gameObject.tag == "room")
@@ -122,17 +123,17 @@ public class SelectionController : MonoBehaviour {
 		}
 	}
 
-	private void InitializeSimulationMenus(GameObject _object)
+	private void InitializeSimulationMenus(GameObject _roomSelected)
 	{ 
 		m_tabManager.ResetIndex();
 		m_panelRoomInfo.SetActive(true);
-		m_panelRoomInfo.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = _object.transform.parent.gameObject.name;
+		m_panelRoomInfo.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = _roomSelected.transform.parent.gameObject.name;
 		EventSystem.current.SetSelectedGameObject(m_inputfieldObjectiveTemperature.gameObject, null);
 		m_inputfieldObjectiveTemperature.OnPointerClick(new PointerEventData(EventSystem.current));
 		
 		ResetActionnerButtonsPanel();
 		m_panelActionnerList.SetActive(true);
-		RoomContainer rc = _object.transform.parent.gameObject.GetComponent<RoomContainer>();
+		RoomContainer rc = _roomSelected.transform.parent.gameObject.GetComponent<RoomContainer>();
 		if (rc.ContainsCommandableActionners ()) 
 		{
 			int index = 0;
@@ -148,6 +149,7 @@ public class SelectionController : MonoBehaviour {
 					++index;
 				}
 			}
+			UpdateHeatIntervalText(rc.MinDeliveredEnergy, rc.MaxDeliveredEnergy);
 		}
 		else
 		{
@@ -171,6 +173,8 @@ public class SelectionController : MonoBehaviour {
 		
 		m_inputfieldObjectiveTemperature.text = "";
 		m_panelHeatRangeInfo.SetActive (false);	
+		m_panelActionnerList.SetActive (false);
+		m_panelRoomInfo.SetActive (false);
 		m_selectedActionnerButton = null;
 
 		m_tabManager.ResetIndex ();
@@ -190,7 +194,11 @@ public class SelectionController : MonoBehaviour {
 
 		/* Updates the inputfields. */
 		float temp = roomContainerTransform.gameObject.GetComponent<RoomContainer>().ObjectiveTemperature;
+		float minDeliveredEnergy = roomContainerTransform.gameObject.GetComponent<RoomContainer> ().MinDeliveredEnergy;
+		float maxDeliveredEnergy = roomContainerTransform.gameObject.GetComponent<RoomContainer> ().MaxDeliveredEnergy;
+		Debug.Log (roomContainerTransform.gameObject.name+" => " + minDeliveredEnergy + "/" + maxDeliveredEnergy);
 		m_inputfieldObjectiveTemperature.text = (float.IsNaN(temp) ? "" : temp.ToString());
+		UpdateHeatIntervalText (minDeliveredEnergy, maxDeliveredEnergy);
 
 		m_tabManager.ResetIndex ();
 		m_tabManager.m_inputFields = new InputField[]{m_inputfieldObjectiveTemperature};
@@ -240,15 +248,23 @@ public class SelectionController : MonoBehaviour {
 		CheckRoomConfigured (c);
 	}
 	
-	public void UpdateMinDeliveredEnergy(string _energy)
+	public void UpdateMinDeliveredEnergyFromInputField(string _energy)
 	{
-		RoomContainer c = m_selectedObjects.ToArray () [0].transform.parent.gameObject.GetComponent<RoomContainer> ();
-		Actionner ac = GameObject.Find(m_selectedActionnerButton.transform.GetChild(0).GetComponent<Text>().text).GetComponent<Actionner>();
+		UpdateMinDeliveredEnergy (_energy, null);
+	}
+
+	public void UpdateMinDeliveredEnergy(string _energy, Actionner _ac)
+	{
+		RoomContainer rc = m_selectedObjects.ToArray () [0].transform.parent.gameObject.GetComponent<RoomContainer> ();
+		Actionner ac;
+
+		if (_ac == null)
+			ac = GameObject.Find (m_selectedActionnerButton.transform.GetChild (0).GetComponent<Text> ().text).GetComponent<Actionner> ();
+		else
+			ac = _ac;
 
 		if (!string.IsNullOrEmpty (_energy)) 
 		{
-			RoomContainer rc = ac.transform.parent.parent.gameObject.GetComponent<RoomContainer>();
-
 			float energy;
 			float.TryParse (_energy, out energy);
 
@@ -280,17 +296,27 @@ public class SelectionController : MonoBehaviour {
 		{
 			m_inputfieldMinDeliveredEnergy.text = float.IsNaN(ac.MinDeliveredEnergy)?"":ac.MinDeliveredEnergy.ToString();
 		}
-		CheckRoomConfigured (c);
+		CheckRoomConfigured (rc);
 	}
 
-	public void UpdateMaxDeliveredEnergy(string _energy)
+	public void UpdateMaxDeliveredEnergyFromInputField(string _energy)
 	{
-		RoomContainer c = m_selectedObjects.ToArray () [0].transform.parent.gameObject.GetComponent<RoomContainer> ();
-		Actionner ac = GameObject.Find(m_selectedActionnerButton.transform.GetChild(0).GetComponent<Text>().text).GetComponent<Actionner>();
+		UpdateMaxDeliveredEnergy (_energy, null);
+	}
+
+	private void UpdateMaxDeliveredEnergy(string _energy, Actionner _ac)
+	{
+		RoomContainer rc = m_selectedObjects.ToArray () [0].transform.parent.gameObject.GetComponent<RoomContainer> ();
+		Actionner ac;
+		
+		if (_ac == null)
+			ac = GameObject.Find (m_selectedActionnerButton.transform.GetChild (0).GetComponent<Text> ().text).GetComponent<Actionner> ();
+		else
+			ac = _ac;
+
 		
 		if (!string.IsNullOrEmpty (_energy)) 
 		{
-			RoomContainer rc = ac.transform.parent.parent.gameObject.GetComponent<RoomContainer>();
 			float energy;
 			float.TryParse (_energy, out energy);
 			
@@ -322,7 +348,7 @@ public class SelectionController : MonoBehaviour {
 		{
 			m_inputfieldMaxDeliveredEnergy.text = float.IsNaN(ac.MaxDeliveredEnergy)?"":ac.MaxDeliveredEnergy.ToString();
 		}
-		CheckRoomConfigured (c);
+		CheckRoomConfigured (rc);
 	}
 
 	private void UpdateHeatIntervalText(float _minEnergy, float _maxEnergy)
@@ -338,6 +364,53 @@ public class SelectionController : MonoBehaviour {
 			m_buttonConfigure.SetActive(true);
 			m_buttonConfigure.GetComponent<Button>().interactable = true;
 		}
+	}
+
+	public void RandomConfiguration()
+	{
+		RoomDeselection ();
+
+		System.Random rd = new System.Random ();
+		for(int i = 0; i < m_configurationController.m_building.GetFloors().ToArray().Length; ++i)
+		{
+			Floor f = m_configurationController.m_building.GetFloors().ToArray()[i];
+			m_configurationController.SetCurrentSelectedFloor(i);
+			foreach(RoomContainer rc in f.GetRoomContainers())
+			{
+				m_selectedObjects.Clear();
+				m_selectedObjects.Add(rc.transform.GetChild(0).gameObject);
+				UpdateObjectiveTemperature(rd.Next(-10, 20).ToString());
+				m_selectedObjects.Clear();
+
+				foreach(Room r in rc.GetRooms())
+				{
+					m_selectedObjects.Clear();
+					m_selectedObjects.Add(r.gameObject);
+
+					foreach(Actionner ac in r.GetCommandableActionnerList())
+					{
+						switch(ac.m_properties)				
+						{
+							case ActionnerProperties.AirConditionner:
+								UpdateMinDeliveredEnergy(rd.Next(-30, -10).ToString(), ac);
+								UpdateMaxDeliveredEnergy("0", ac);
+								break;
+							case ActionnerProperties.GazHeater:	
+								UpdateMinDeliveredEnergy("0", ac);
+								UpdateMaxDeliveredEnergy(rd.Next(10, 30).ToString(), ac);
+								break;
+							case ActionnerProperties.RadiativeHeater:
+								UpdateMinDeliveredEnergy("0", ac);
+								UpdateMaxDeliveredEnergy(rd.Next(10, 40).ToString(), ac);
+								break;
+						}
+					}
+				}
+				Debug.Log("\n---"+rc.gameObject.name+"---------\n"+ rc.MinDeliveredEnergy);
+			}
+		}
+		m_configurationController.SetCurrentSelectedFloor(-1);
+		m_selectedObjects.Clear();
 	}
 
 	public void ResetSelectionController()
@@ -375,6 +448,5 @@ public class SelectionController : MonoBehaviour {
 
 		EventSystem.current.SetSelectedGameObject(m_inputfieldMinDeliveredEnergy.gameObject, null);
 		m_inputfieldMinDeliveredEnergy.OnPointerClick(new PointerEventData(EventSystem.current));
-
 	}
 }

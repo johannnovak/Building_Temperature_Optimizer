@@ -63,7 +63,6 @@ public class ConfigurationController : MonoBehaviour {
 
 	public void SetCurrentSelectedFloor(int _floorNumber)
 	{
-		Debug.Log (_floorNumber);
 		m_currentSelectedFloor = _floorNumber;
 	}
 
@@ -80,6 +79,8 @@ public class ConfigurationController : MonoBehaviour {
 					break;
 				}
 			}
+			if(currentSelectedFloor == -1)
+				return;
 		}
 		else
 		{
@@ -89,7 +90,6 @@ public class ConfigurationController : MonoBehaviour {
 		List<RoomContainer> roomContainerList;
 		m_remainingRoomContainers.TryGetValue (currentSelectedFloor, out roomContainerList);
 		roomContainerList.Remove (_container);
-		
 	}
 
 	public void ResetConfigurationManager()
