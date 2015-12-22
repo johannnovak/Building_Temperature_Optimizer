@@ -12,7 +12,7 @@ public class Floor : MonoBehaviour {
 		for (int i = 0; i < transform.GetChild(0).childCount; ++i)
 		{
 			GameObject buildingObject = transform.GetChild(0).GetChild(i).gameObject;
-			if(buildingObject.tag.Equals("room"))
+			if(buildingObject.tag.Equals("roomContainer"))
 			{
 				RoomContainer roomContainer = buildingObject.GetComponent<RoomContainer> ();
 				roomContainer.Initialize();

@@ -30,6 +30,9 @@ public class SelectionController : MonoBehaviour {
 
 	private bool m_canSelect;
 
+	public GameObject m_buttonGo;
+	public GameObject m_buttonConfigure;
+
 	// Use this for initialization
 	void Start () {
 		m_canSelect = true;
@@ -81,12 +84,12 @@ public class SelectionController : MonoBehaviour {
 			{
 				if (hitInfo.transform.gameObject.tag == "room")
 				{
-					GameObject o = hitInfo.transform.gameObject.transform.gameObject;
+					GameObject roomSelected = hitInfo.transform.gameObject;
 
 					/* Room already selected. */
 					if(m_selectedObjects.Count != 0)
 					{
-						if(m_selectedObjects.Contains(o))
+						if(m_selectedObjects.Contains(roomSelected))
 						{
 							/* Room inside the selected objects. => deselection. */
 							RoomDeselection();
@@ -95,18 +98,18 @@ public class SelectionController : MonoBehaviour {
 						else
 						{
 							RoomDeselection();
-							RoomSelection(o);
+							RoomSelection(roomSelected);
 						}
 					}
 					else /* No room selected => add room. */
 					{
-						RoomSelection(o);
+						RoomSelection(roomSelected);
 					}
 
 					/* Shows menu when clicked. */
 					if(m_selectedObjects.Count > 0)
 					{
-						InitializeSimulationMenus(o);
+						InitializeSimulationMenus(roomSelected);
 					}
 					else
 					{
@@ -160,7 +163,7 @@ public class SelectionController : MonoBehaviour {
 			o.SetActive (false);
 	}
 
-	private void RoomDeselection()
+	public void RoomDeselection()
 	{
 		foreach(GameObject selectedObject in m_selectedObjects)
 			selectedObject.GetComponent<MeshRenderer>().materials = new Material[0];
@@ -176,17 +179,17 @@ public class SelectionController : MonoBehaviour {
 
 	private void RoomSelection(GameObject o)
 	{
-		Transform containerTransform = o.transform.parent;
-		for(int i = 0; i < containerTransform.childCount; ++i)
+		Transform roomContainerTransform = o.transform.parent;
+		for(int i = 0; i < roomContainerTransform.childCount; ++i)
 		{
-			GameObject roomObject = containerTransform.GetChild(i).gameObject;
+			GameObject roomObject = roomContainerTransform.GetChild(i).gameObject;
 			//m_selectedOldMaterial = m_selectedObject.GetComponent<Renderer>().material;
 			roomObject.GetComponent<Renderer>().material = m_selectedMaterial;
 			m_selectedObjects.Add(roomObject);
 		}
-		
+
 		/* Updates the inputfields. */
-		float temp = containerTransform.gameObject.GetComponent<RoomContainer>().ObjectiveTemperature;
+		float temp = roomContainerTransform.gameObject.GetComponent<RoomContainer>().ObjectiveTemperature;
 		m_inputfieldObjectiveTemperature.text = (float.IsNaN(temp) ? "" : temp.ToString());
 
 		m_tabManager.ResetIndex ();
@@ -208,7 +211,14 @@ public class SelectionController : MonoBehaviour {
 		bool actionnersReadied = ActionnerReadied (_rc);
 		
 		if (!float.IsNaN(_rc.ObjectiveTemperature) && actionnersReadied) 
+		{
 			m_configurationController.UpdateConfiguredRoomContainers(_rc);
+			_rc.Prepared = true;
+		}
+		else
+		{
+			_rc.Prepared = false;
+		}
 	}
 
 	public void UpdateObjectiveTemperature(string _temperature)
@@ -220,6 +230,8 @@ public class SelectionController : MonoBehaviour {
 			float temperature;
 			float.TryParse (_temperature, out temperature);
 			c.ObjectiveTemperature = temperature;
+			
+			UpdateButtonSimulationLaunch();
 		}
 		else
 		{
@@ -256,6 +268,8 @@ public class SelectionController : MonoBehaviour {
 
 				if(!float.IsNaN(ac.MinDeliveredEnergy) && !float.IsNaN(ac.MaxDeliveredEnergy))
 					ac.Prepared = true;
+
+				UpdateButtonSimulationLaunch();
 			}
 			else
 			{
@@ -296,6 +310,8 @@ public class SelectionController : MonoBehaviour {
 
 				if(!float.IsNaN(ac.MinDeliveredEnergy) && !float.IsNaN(ac.MaxDeliveredEnergy))
 					ac.Prepared = true;
+
+				UpdateButtonSimulationLaunch();
 			}
 			else
 			{
@@ -312,6 +328,16 @@ public class SelectionController : MonoBehaviour {
 	private void UpdateHeatIntervalText(float _minEnergy, float _maxEnergy)
 	{
 		m_deliveredEnergyRangeInterval.text = "[ "+_minEnergy+" ; "+_maxEnergy+" ]";
+	}
+
+	private void UpdateButtonSimulationLaunch()
+	{
+		if(m_buttonGo.activeInHierarchy)
+		{
+			m_buttonGo.SetActive(false);
+			m_buttonConfigure.SetActive(true);
+			m_buttonConfigure.GetComponent<Button>().interactable = true;
+		}
 	}
 
 	public void ResetSelectionController()

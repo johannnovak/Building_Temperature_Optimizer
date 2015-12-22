@@ -13,6 +13,8 @@ public class RoomContainer : MonoBehaviour {
 	public float MaxDeliveredEnergy { get; set;}
 	public float CurrentDeliveredEnergy { get; set;}
 
+	public bool Prepared { get; set;}
+
 	private bool m_containsCommandableActionners;
 
 	// Use this for initialization
@@ -23,6 +25,7 @@ public class RoomContainer : MonoBehaviour {
 		MinDeliveredEnergy = float.NaN;
 		MaxDeliveredEnergy = float.NaN;
 		CurrentDeliveredEnergy = float.NaN;
+		Prepared = false;
 		
 		m_containsCommandableActionners = false;
 

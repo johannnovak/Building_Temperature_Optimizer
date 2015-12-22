@@ -5,10 +5,23 @@ public class BuildingFloorFilterer : BuildingFloorListener {
 
 	private Building m_building;
 	private Floor m_displayedFloor;
+	public Camera m_mainCamera;
+	private int m_cullingMaskNoFloors;
+	private int m_cullingMaskAllFloors;
 
 	private void Start()
 	{
 		m_building = GetComponent<Building>();
+		m_building.Initialize ();
+		m_cullingMaskAllFloors = m_mainCamera.cullingMask;
+		m_cullingMaskNoFloors = m_cullingMaskAllFloors;
+
+		for(int i = 0; i < m_building.GetFloors().ToArray().Length; ++i)
+		{
+			string layerName = "floor_"+i;
+			int layerMask = 1 << LayerMask.NameToLayer(layerName);
+			m_cullingMaskNoFloors &= ~layerMask;
+		}
 	}
 
 	public override void FilterFloors(int _floorNumber)
@@ -16,19 +29,11 @@ public class BuildingFloorFilterer : BuildingFloorListener {
 		switch(_floorNumber)
 		{
 			case 0:	
-				foreach(Floor f in m_building.GetFloors())
-					f.gameObject.SetActive(true);
-				m_displayedFloor = null;
+				m_mainCamera.cullingMask = m_cullingMaskAllFloors;
 				break;
 			default:
-				if(m_displayedFloor != null)
-					m_displayedFloor.gameObject.SetActive(false);
-				else
-					foreach(Floor f in m_building.GetFloors())
-						f.gameObject.SetActive(false);
-
-				m_displayedFloor = m_building.GetFloors()[_floorNumber - 1];
-				m_displayedFloor.gameObject.SetActive(true);
+				int layerMask = 1 << LayerMask.NameToLayer("floor_"+(_floorNumber-1));
+				m_mainCamera.cullingMask = m_cullingMaskNoFloors | layerMask;
 				break;
 		}
 	}

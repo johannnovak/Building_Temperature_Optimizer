@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
 using System;
 
 public class Building : MonoBehaviour {
 
-	private Floor[] m_floors;
+	private List<Floor> m_floors;
 	public Text m_textRoomConfiguredCount;
 	private bool m_initialized = false;
 
@@ -17,24 +18,27 @@ public class Building : MonoBehaviour {
 
 	public void Initialize()
 	{
-		if (!m_initialized) {
-			m_floors = new Floor[transform.childCount];
+		if (!m_initialized) 
+		{
+			m_floors = new List<Floor> ();
 			int realsize = 0;
-			for (int i = 0; i < m_floors.Length; ++i)
-				if (transform.GetChild (i).tag.Equals ("floor")) {
-					m_floors [realsize] = transform.GetChild (i).gameObject.GetComponent<Floor> ();
-					m_floors [realsize].Initialize ();
+			for (int i = 0; i < transform.childCount; ++i)
+			{
+				if (transform.GetChild (i).tag.Equals ("floor")) 
+				{
+					m_floors.Add(transform.GetChild (i).gameObject.GetComponent<Floor>());
+					m_floors.ToArray()[realsize].Initialize ();
 					++realsize;
 				}
-		
-			Array.Resize (ref m_floors, realsize);
-		
+			}
+
 			int count = 0;
 			foreach (Floor f in m_floors)
 				foreach (RoomContainer rc in f.GetRoomContainers())
 					++count;
-		
+	
 			m_textRoomConfiguredCount.text = "0/" + count;
+				
 			m_initialized = true;
 		}
 	}
@@ -49,7 +53,7 @@ public class Building : MonoBehaviour {
 		string display = "";
 
 		display += "\n Building "+name;
-		display += "\n Composed of " + m_floors.Length + " floors :";
+		display += "\n Composed of " + m_floors.ToArray().Length + " floors :";
 		display += "\n========================================";
 		foreach (Floor f in m_floors)
 			display += f.ToString ();
@@ -58,7 +62,7 @@ public class Building : MonoBehaviour {
 		return display;
 	}
 
-	public Floor[] GetFloors()
+	public List<Floor> GetFloors()
 	{
 		return m_floors;
 	}
