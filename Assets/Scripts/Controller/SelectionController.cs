@@ -21,6 +21,7 @@ public class SelectionController : MonoBehaviour {
 	public InputField m_inputfieldMinDeliveredEnergy;
 	public InputField m_inputfieldMaxDeliveredEnergy;
 	public Text m_deliveredEnergyRangeInterval;
+	public Text m_deliveredEnergyValue;
 
 	private GameObject m_selectedActionnerButton;
 
@@ -34,7 +35,7 @@ public class SelectionController : MonoBehaviour {
 	public GameObject m_buttonConfigure;
 
 	// Use this for initialization
-	void Start () {
+	public void Start () {
 		m_canSelect = true;
 		m_selectedObjects = new List<GameObject> ();
 		m_selectedMaterial = Resources.Load("stripes_mat", typeof(Material)) as Material;
@@ -196,9 +197,10 @@ public class SelectionController : MonoBehaviour {
 		float temp = roomContainerTransform.gameObject.GetComponent<RoomContainer>().ObjectiveTemperature;
 		float minDeliveredEnergy = roomContainerTransform.gameObject.GetComponent<RoomContainer> ().MinDeliveredEnergy;
 		float maxDeliveredEnergy = roomContainerTransform.gameObject.GetComponent<RoomContainer> ().MaxDeliveredEnergy;
-		Debug.Log (roomContainerTransform.gameObject.name+" => " + minDeliveredEnergy + "/" + maxDeliveredEnergy);
+		float currentDeliveredEnergy = roomContainerTransform.gameObject.GetComponent<RoomContainer> ().CurrentDeliveredEnergy;
 		m_inputfieldObjectiveTemperature.text = (float.IsNaN(temp) ? "" : temp.ToString());
 		UpdateHeatIntervalText (minDeliveredEnergy, maxDeliveredEnergy);
+		m_deliveredEnergyValue.text = currentDeliveredEnergy.ToString () + " °C";
 
 		m_tabManager.ResetIndex ();
 		m_tabManager.m_inputFields = new InputField[]{m_inputfieldObjectiveTemperature};
@@ -406,7 +408,6 @@ public class SelectionController : MonoBehaviour {
 						}
 					}
 				}
-				Debug.Log("\n---"+rc.gameObject.name+"---------\n"+ rc.MinDeliveredEnergy);
 			}
 		}
 		m_configurationController.SetCurrentSelectedFloor(-1);

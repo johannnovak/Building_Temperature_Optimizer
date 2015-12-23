@@ -9,6 +9,7 @@ public class ConfigurationController : MonoBehaviour {
 	public Building m_building;
 	public Text m_textConfiguredRoom;
 	public Button m_buttonConfigure;
+	public Button m_buttonGo;
 
 	private Dictionary<int, List<RoomContainer>> m_remainingRoomContainers;
 	private int m_currentSelectedFloor;
@@ -100,5 +101,16 @@ public class ConfigurationController : MonoBehaviour {
 		{
 			m_remainingRoomContainers.Add(i, new List<RoomContainer>(m_building.GetFloors()[i].GetRoomContainers()));
 		}
+	}
+
+	public void CreateConfigurationFiles()
+	{
+		CreateBuildingOptimizationFile ();
+
+		m_buttonGo.interactable = true;
+	}
+
+	private void CreateBuildingOptimizationFile()
+	{
 	}
 }

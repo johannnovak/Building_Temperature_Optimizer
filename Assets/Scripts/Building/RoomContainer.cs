@@ -74,6 +74,7 @@ public class RoomContainer : MonoBehaviour {
 		CurrentDeliveredEnergy = float.NaN;
 		MinDeliveredEnergy = float.NaN;
 		MaxDeliveredEnergy = float.NaN;
-		Volume = 0;
+
+		Prepared = false;
 	}
 }

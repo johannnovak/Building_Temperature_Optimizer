@@ -3,16 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class SunMoonOrbiting : MonoBehaviour {
-	
-	private int m_currentTimeDay;
-	public float m_currentTimeHour;
-	public float m_currentTimeMinute;
-	private float m_currentTimeSeconds;
 
-	public float m_sunRiseHour;
-	public float m_sunRiseMinute;
-	public float m_sunSetHour;
-	public float m_sunSetMinute;
+	private int m_currentTimeDay;
+	private float m_currentTimeHour;
+	private float m_currentTimeMinute;
+	private float m_currentTimeSeconds;
 
 	public float m_timeSpeed;
 
@@ -80,6 +75,8 @@ public class SunMoonOrbiting : MonoBehaviour {
 		Quaternion q = new Quaternion ();
 		q.eulerAngles = new Vector3 (0, 0, 0);
 		transform.rotation = q;
+
+		m_currentTimeDay = 0;
 	}
 
 	void Update () {

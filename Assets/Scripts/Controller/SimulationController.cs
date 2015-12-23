@@ -89,6 +89,8 @@ public class SimulationController : MonoBehaviour {
 		m_configurationController.SetActive(true);
 		m_selectionController.SetActive(true);
 
+		m_configurationController.		GetComponent<ConfigurationController>().SetCurrentSelectedFloor(-1);
+
 		m_sunMoonOrbiting.SetCurrentTime(m_simulationHour, m_simulationMinute);
 		m_sunMoonOrbiting.ComputeDayTime (m_simulationWeathers.ToArray()[0]);
 
@@ -110,6 +112,11 @@ public class SimulationController : MonoBehaviour {
 	public static float GetCurrentTemperature(int _currentDay, float _currentHour, float _currentMinute, float _currentSecond)
 	{
 		return SimulationController.m_simulationWeathers.ToArray()[_currentDay].GetTemperatureWithTime(_currentHour, _currentMinute, _currentSecond);
+	}
+
+	public List<Weather> GetWeatherList()
+	{
+		return m_simulationWeathers;
 	}
 
 	public void QuitApplication()

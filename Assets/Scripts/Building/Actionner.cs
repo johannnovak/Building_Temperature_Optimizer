@@ -45,4 +45,12 @@ public class Actionner : MonoBehaviour {
 	{
 		return typeof(ActionnerProperties).GetField(Enum.GetName(typeof(ActionnerProperties), _acProps));
 	}
+
+	public void ResetActionner()
+	{
+		MinDeliveredEnergy = float.NaN;
+		MaxDeliveredEnergy = float.NaN;
+
+		Prepared = false;
+	}
 }

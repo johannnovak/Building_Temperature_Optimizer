@@ -64,4 +64,10 @@ public class Room : MonoBehaviour {
 
 		return display;
 	}
+
+	public void ResetRoom()
+	{
+		foreach (Actionner ac in m_commandableActionners)
+			ac.ResetActionner ();
+	}
 }
