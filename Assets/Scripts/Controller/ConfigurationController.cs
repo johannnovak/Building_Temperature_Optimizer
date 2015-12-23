@@ -102,15 +102,4 @@ public class ConfigurationController : MonoBehaviour {
 			m_remainingRoomContainers.Add(i, new List<RoomContainer>(m_building.GetFloors()[i].GetRoomContainers()));
 		}
 	}
-
-	public void CreateConfigurationFiles()
-	{
-		CreateBuildingOptimizationFile ();
-
-		m_buttonGo.interactable = true;
-	}
-
-	private void CreateBuildingOptimizationFile()
-	{
-	}
 }

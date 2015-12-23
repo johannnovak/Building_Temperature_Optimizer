@@ -8,6 +8,8 @@ public class SimulationController : MonoBehaviour {
 
 	public GameObject m_menuPanel;
 	public GameObject m_simulationPanel;
+	public GameObject m_timeManipulationPanel;
+	public GameObject m_timeTempPanel;
 	public GameObject m_selectionController;
 	public GameObject m_configurationController;
 
@@ -88,8 +90,10 @@ public class SimulationController : MonoBehaviour {
 		m_simulationPanel.SetActive (true);
 		m_configurationController.SetActive(true);
 		m_selectionController.SetActive(true);
+		m_timeManipulationPanel.SetActive (false);
+		m_timeTempPanel.SetActive (false);
 
-		m_configurationController.		GetComponent<ConfigurationController>().SetCurrentSelectedFloor(-1);
+		m_configurationController.GetComponent<ConfigurationController>().SetCurrentSelectedFloor(-1);
 
 		m_sunMoonOrbiting.SetCurrentTime(m_simulationHour, m_simulationMinute);
 		m_sunMoonOrbiting.ComputeDayTime (m_simulationWeathers.ToArray()[0]);

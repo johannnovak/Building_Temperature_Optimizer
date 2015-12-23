@@ -1,14 +1,13 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Release" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Controller\SimulationController.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\UI\TimeTempTextUpdater.cs">
     <Files>
-      <File FileName="Assets\Scripts\Controller\SimulationController.cs" Line="119" Column="31" />
-      <File FileName="Assets\Scripts\UI\BuildingFloorFilterer.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\UI\BuildingFloorManager.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\UI\BuildingFloorRoomContainerUpdater.cs" Line="15" Column="31" />
-      <File FileName="Assets\Scripts\Controller\OptimizationController.cs" Line="26" Column="35" />
-      <File FileName="Assets\Scripts\UI\TimeTempManager.cs" Line="14" Column="1" />
-      <File FileName="Assets\Scripts\DayFeatures\SunMoonOrbiting.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Controller\SimulationController.cs" Line="80" Column="36" />
+      <File FileName="Assets\Scripts\Controller\OptimizationController.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\UI\TimeTempManager.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\DayFeatures\SunMoonOrbiting.cs" Line="129" Column="3" />
+      <File FileName="Assets\Scripts\Controller\ConfigurationController.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\UI\TimeTempTextUpdater.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

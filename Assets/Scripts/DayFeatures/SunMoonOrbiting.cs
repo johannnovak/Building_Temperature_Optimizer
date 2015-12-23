@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -10,7 +11,8 @@ public class SunMoonOrbiting : MonoBehaviour {
 	private float m_currentTimeSeconds;
 
 	public float m_timeSpeed;
-
+	private float m_savedTimeSpeed;
+	public TimeSpeedTextUpdater m_simulationTimeSpeedText;
 	private float m_currentAngle;
 
 	private float m_dayTimeSecond;
@@ -58,6 +60,8 @@ public class SunMoonOrbiting : MonoBehaviour {
 		transform.RotateAround(Vector3.zero, Vector3.right, modAngle);
 		transform.GetChild (0).LookAt (Vector3.zero);
 		transform.GetChild (1).LookAt (Vector3.zero);
+
+		m_simulationTimeSpeedText.SetTimeSpeed(m_timeSpeed);
 	}
 	
 	public void StartOrbiting()
@@ -122,12 +126,36 @@ public class SunMoonOrbiting : MonoBehaviour {
 
 	public void DoubleTimeSpeed()
 	{
-		m_timeSpeed *= 2;
+		m_timeSpeed *= 2.0F;
+		m_simulationTimeSpeedText.SetTimeSpeed (m_timeSpeed);
+	}
+
+	public void PauseTimeSpeed()
+	{
+		if(m_timeSpeed != 0.0F)
+		{
+			m_savedTimeSpeed = m_timeSpeed;
+			m_timeSpeed = 0.0F;
+		}	
+		m_simulationTimeSpeedText.SetTimeSpeed (m_timeSpeed);
+	}
+
+	public void ResumeTimeSpeed()
+	{
+		if(m_savedTimeSpeed != 0.0F)
+		{
+			m_timeSpeed = m_savedTimeSpeed;
+			m_savedTimeSpeed = 0.0F;
+		}
+		
+		m_simulationTimeSpeedText.SetTimeSpeed (m_timeSpeed);
+		Debug.Log (m_timeSpeed);
 	}
 
 	public void HalfTimeSpeed()
 	{
 		m_timeSpeed /= 2;
+		m_simulationTimeSpeedText.SetTimeSpeed (m_timeSpeed);
 	}
 	
 	public float GetSunAngle()

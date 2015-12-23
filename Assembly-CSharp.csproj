@@ -71,21 +71,16 @@
      <Compile Include="Assets\Scripts\UI\InputFieldTimeUpdater.cs" />
      <Compile Include="Assets\Scripts\UI\StaticWeatherUIManager.cs" />
      <Compile Include="Assets\Scripts\UI\StaticWeatherUpdaterButton.cs" />
+     <Compile Include="Assets\Scripts\UI\TimeSpeedTextUpdater.cs" />
      <Compile Include="Assets\Scripts\UI\TimeTempListener.cs" />
      <Compile Include="Assets\Scripts\UI\TimeTempManager.cs" />
      <Compile Include="Assets\Scripts\UI\TimeTempTextUpdater.cs" />
      <Compile Include="Assets\Scripts\Utils\SimpleJSON.cs" />
- <Reference Include="UnityEngine.Advertisements">
- <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/Advertisements/UnityEngine.Advertisements.dll</HintPath>
- </Reference>
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.Networking">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll</HintPath>
- </Reference>
- <Reference Include="UnityEngine.Analytics">
- <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/UnityAnalytics/UnityEngine.Analytics.dll</HintPath>
  </Reference>
  <Reference Include="ICSharpCode.SharpZipLib">
  <HintPath>F:/jnovak/utbm/gi05d/TX52/Building_Temperature_Optimizer_fix/Assets/Plugins/ICSharpCode.SharpZipLib.dll</HintPath>
