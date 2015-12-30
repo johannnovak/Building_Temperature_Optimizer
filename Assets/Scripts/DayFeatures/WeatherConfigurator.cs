@@ -16,7 +16,7 @@ public class WeatherConfigurator : MonoBehaviour {
 	//	RequestWeather ("besancin", 0F, 0F, 0F, 0F);
 	}
 
-	public KeyValuePair<bool,string> RequestOnlineWeather(string _city, float _simulationTimeHour, float _simulationTimeMinute, float _simulationDurationHour, float _simulationDurationMinute, ref Text _textConfigureDescription)
+	public KeyValuePair<bool,string> RequestOnlineWeather(string _city, float _simulationTimeHour, float _simulationTimeMinute, ref Text _textConfigureDescription)
 	{
 		_textConfigureDescription.text = "Requesting worldweatheronline.com...";
 		string json = GetJSONFromWebRequest ("http://api.worldweatheronline.com/free/v2/weather.ashx?q=" + _city + "&format=json&num_of_days=10&date=today&key=b1fbba3aff3f713681d871adf0f99");
@@ -109,7 +109,7 @@ public class WeatherConfigurator : MonoBehaviour {
 	}
 
 
-	public KeyValuePair<bool,string> CreateOfflineWeather(float _simulationTimeHour, float _simulationTimeMinute, float _simulationDurationHour, float _simulationDurationMinute, StaticWeatherUpdaterButton[] _weatherButtons)
+	public KeyValuePair<bool,string> CreateOfflineWeather(float _simulationTimeHour, float _simulationTimeMinute, StaticWeatherUpdaterButton[] _weatherButtons)
 	{
 		m_controller.SetCurrentTime(_simulationTimeHour, _simulationTimeMinute);
 		int dayNumber = 0;

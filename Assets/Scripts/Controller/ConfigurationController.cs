@@ -6,7 +6,7 @@ using System;
 
 public class ConfigurationController : MonoBehaviour {
 
-	public Building m_building;
+	private Building m_building;
 	public Text m_textConfiguredRoom;
 	public Button m_buttonConfigure;
 	public Button m_buttonGo;
@@ -18,6 +18,7 @@ public class ConfigurationController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		m_building = GameObject.Find ("building").GetComponent<Building> ();
 		m_currentSelectedFloor = -1;
 		m_remainingRoomContainers = new Dictionary<int, List<RoomContainer>> ();
 		m_floorTotalRoomNb = new List<int> ();
@@ -101,5 +102,10 @@ public class ConfigurationController : MonoBehaviour {
 		{
 			m_remainingRoomContainers.Add(i, new List<RoomContainer>(m_building.GetFloors()[i].GetRoomContainers()));
 		}
+	}
+
+	public Building GetBuilding()
+	{
+		return m_building;
 	}
 }

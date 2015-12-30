@@ -9,12 +9,13 @@ public class OptimizationController : MonoBehaviour {
 	private string m_optimizationConstraintFilePath;
 
 	public Button m_buttonGo;
-	public Building m_building;
+	private Building m_building;
 	public SimulationController m_simulationController;
 	private List<Weather> m_weatherList;
 
 	// Use this for initialization
 	void Start () {
+		m_building = GameObject.Find ("building").GetComponent<Building> ();
 		m_weatherList = m_simulationController.GetWeatherList ();
 	}
 	

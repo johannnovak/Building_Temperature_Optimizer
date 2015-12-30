@@ -43,7 +43,7 @@ public class SelectionController : MonoBehaviour {
 		m_tabManager = GetComponent<InputFieldTabManager> ();
 
 		m_actionnerListContentPanel = m_panelActionnerList.transform.GetChild (1).GetChild (0).GetChild (0).GetChild (0).gameObject;
-		Building b = m_configurationController.m_building;
+		Building b = GameObject.Find ("building").GetComponent<Building> ();
 		b.Initialize ();
 		m_actionnerButtonList = new List<GameObject> ();
 		foreach (Floor f in b.GetFloors())
@@ -373,9 +373,9 @@ public class SelectionController : MonoBehaviour {
 		RoomDeselection ();
 
 		System.Random rd = new System.Random ();
-		for(int i = 0; i < m_configurationController.m_building.GetFloors().ToArray().Length; ++i)
+		for(int i = 0; i < m_configurationController.GetBuilding().GetFloors().ToArray().Length; ++i)
 		{
-			Floor f = m_configurationController.m_building.GetFloors().ToArray()[i];
+			Floor f = m_configurationController.GetBuilding().GetFloors().ToArray()[i];
 			m_configurationController.SetCurrentSelectedFloor(i);
 			foreach(RoomContainer rc in f.GetRoomContainers())
 			{

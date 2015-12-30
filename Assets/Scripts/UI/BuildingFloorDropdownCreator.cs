@@ -4,11 +4,12 @@ using System.Collections;
 
 public class BuildingFloorDropdownCreator : MonoBehaviour {
 	
-	public Building m_building;
+	private Building m_building;
 	private Dropdown m_dropdown;
 	
 	// Use this for initialization
 	void Start () {
+		m_building = GameObject.Find("building").GetComponent<Building>();
 		m_building.Initialize ();
 		Debug.Log (m_building.ToString ());
 		

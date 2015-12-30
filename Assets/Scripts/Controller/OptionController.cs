@@ -14,8 +14,6 @@ public class OptionController : MonoBehaviour {
 
 	public InputField m_simulationTimeHourInputField;
 	public InputField m_simulationTimeMinuteInputField;
-	public InputField m_simulationDurationHourInputField;
-	public InputField m_simulationDurationMinuteInputField;
 	
 	public InputField m_cityInputField;
 
@@ -47,21 +45,18 @@ public class OptionController : MonoBehaviour {
 		string[] currentTime = DateTime.Now.ToString ("HH:mm").Split (':');
 		float simulationTimeHour = string.IsNullOrEmpty (m_simulationTimeHourInputField.text) ? float.Parse(currentTime[0]) : float.Parse (m_simulationTimeHourInputField.text);
 		float simulationTimeMinute = string.IsNullOrEmpty (m_simulationTimeMinuteInputField.text) ? float.Parse(currentTime[1]) : float.Parse (m_simulationTimeMinuteInputField.text);
-		
-		float simulationDurationHour = string.IsNullOrEmpty (m_simulationDurationHourInputField.text) ? 0F : float.Parse (m_simulationDurationHourInputField.text);
-		float simulationDurationMinute = string.IsNullOrEmpty (m_simulationDurationMinuteInputField.text) ? 0F : float.Parse (m_simulationDurationMinuteInputField.text);
 
 		KeyValuePair<bool, string> pair;
 		/* Dynamic search. */
 		if (m_dropdownConfigurationStyle.value == 0) 
 		{
 			string city = string.IsNullOrEmpty (m_cityInputField.text) ? "Belfort" : m_cityInputField.text;
-			pair = GetComponent<WeatherConfigurator> ().RequestOnlineWeather (city, simulationTimeHour, simulationTimeMinute, simulationDurationHour, simulationDurationMinute, ref m_textConfigureDescription);
+			pair = GetComponent<WeatherConfigurator> ().RequestOnlineWeather (city, simulationTimeHour, simulationTimeMinute, ref m_textConfigureDescription);
 
 		}
 		else /* Static input of values. */
 		{
-			pair = GetComponent<WeatherConfigurator>().CreateOfflineWeather(simulationTimeHour, simulationTimeMinute, simulationDurationHour, simulationDurationMinute, m_weatherButtons);
+			pair = GetComponent<WeatherConfigurator>().CreateOfflineWeather(simulationTimeHour, simulationTimeMinute, m_weatherButtons);
 		}
 		configurationOK &= pair.Key;
 		problemDesc = pair.Value;
