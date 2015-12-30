@@ -1,0 +1,48 @@
+informations :
+PID_Example-pso
+E:\UTBM\ST40\WFA\WFA1\bin\Debug\PID\PID_Example-pso.txt
+08/12/2014 11:18:03
+09/12/2014 12:22:03
+1
+OpenModelica
+2 1 0 1 5
+enonce :
+PSO
+Data
+Lien
+direct
+1
+parameters :
+3 302 20 1 1 0,4 0,9 0 1 0 1 1 1
+variables :
+ c 
+ c 
+ c 
+init :
+0
+contraintes :
+0 1000 1e16
+0 1000 1e16
+0 1000 1e16
+contraintes spe1 :
+fin spe
+contraintes spe2 :
+fin spe
+contraintes post1 :
+fin post
+contraintes post2 :
+fin post
+extra :
+0 100 -10 10 0
+0 100 -10 10 0
+0 100 -10 10 0
+lien :
+1
+debut lien
+
+OpenModelica
+C:\OpenModelica1.9.1Beta4\bin\omc.exe
+E:\UTBM\ST40\WFA\WFA1\bin\Debug\PID\PID_Example.mo
+E:\UTBM\ST40\WFA\WFA1\bin\Debug\PID\Parameters.txt
+
+fin lien

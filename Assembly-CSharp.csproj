@@ -53,6 +53,7 @@
      <Compile Include="Assets\Scripts\Building\Wall.cs" />
      <Compile Include="Assets\Scripts\Camera\CameraHandling.cs" />
      <Compile Include="Assets\Scripts\Controller\ConfigurationController.cs" />
+     <Compile Include="Assets\Scripts\Controller\Optimization.cs" />
      <Compile Include="Assets\Scripts\Controller\OptimizationController.cs" />
      <Compile Include="Assets\Scripts\Controller\OptionController.cs" />
      <Compile Include="Assets\Scripts\Controller\SelectionController.cs" />

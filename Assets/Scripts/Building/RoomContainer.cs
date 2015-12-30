@@ -6,6 +6,8 @@ public class RoomContainer : MonoBehaviour {
 
 	private List<Room> m_rooms;
 
+	public int number { get; set;}
+
 	public float Volume { get; private set;}
 
 	public float ObjectiveTemperature { get; set;}

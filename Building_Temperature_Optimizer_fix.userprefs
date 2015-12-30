@@ -1,8 +1,17 @@
-﻿<Properties>
-  <MonoDevelop.Ide.Workspace />
-  <MonoDevelop.Ide.Workbench ActiveDocument="..\..\VI50\project\Building_Visualizer_3D_fix\Assets\Scripts\animations\AnimatedObject.cs">
+﻿<Properties StartupItem="Assembly-CSharp.csproj">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Controller\SelectionController.cs">
     <Files>
+      <File FileName="Assets\Scripts\Controller\SelectionController.cs" Line="378" Column="53" />
+      <File FileName="Assets\Scripts\UI\BuildingFloorDropdownCreator.cs" Line="1" Column="1" />
       <File FileName="..\..\VI50\project\Building_Visualizer_3D_fix\Assets\Scripts\animations\AnimatedObject.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Controller\ConfigurationController.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Building\Room.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Building\RoomContainer.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Building\Floor.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Building\Building.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Controller\OptimizationController.cs" Line="1" Column="1" />
+      <File FileName="C:\Users\jnovak\Downloads\modif Hans\Scripts\Controller\SelectionController.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

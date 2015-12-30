@@ -1,0 +1,66 @@
+informations :
+Poutre
+E:\UTBM\ST40\Simulation\Poutre.txt
+07/01/2015 15:53:57
+07/01/2015 16:32:40
+1
+Cas test de la poutre
+2 1 0 1 0
+enonce :
+PSO
+custom
+[l0]
+post
+1
+parameters :
+4 800 20 1 1 0,4 0,9 1 10 1 0,9 2 20
+variables :
+x1 c 
+x2 c 
+x3 c 
+x4 c 
+init :
+0
+contraintes :
+0.1 100 100000000
+0.1 10 100000000
+0.1 10 100000000
+0 2 100000000
+contraintes spe1 :
+[x0]<=[x3]
+0.10471*Pow([x0],2)+0.04811*[x2]*[x3]*(14+[x1])<=5
+0.125<=[x0]
+fin spe
+contraintes spe2 :
+1000+10*[x0]-10*[x3]
+1000+10*Pow([x0],2)+10*([x1]+[x2]+[x3])
+10000-10*[x0]
+fin spe
+contraintes post1 :
+[l0.1]<=13.6
+[l0.2]<=30
+[l0.3]<=0.25
+6<=[l0.4]
+fin post
+contraintes post2 :
+10000
+10000
+10000
+10000
+fin post
+extra :
+    
+    
+    
+    
+lien :
+1
+debut lien
+
+Excel
+E:\UTBM\ST40\Test\Poutre.xlsx
+0 1 6 3,1 1 7 3,2 1 8 3,3 1 9 3
+1 10 3,1 6 7,1 7 7,1 8 7,1 9 7
+
+
+fin lien

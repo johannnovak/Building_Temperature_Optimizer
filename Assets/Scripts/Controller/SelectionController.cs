@@ -5,11 +5,11 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class SelectionController : MonoBehaviour {
-	
+
 	public Camera m_camera;
 
 	public ConfigurationController m_configurationController;
-	
+
 	public GameObject m_panelRoomInfo;
 	public GameObject m_panelActionnerList;
 	public GameObject m_panelHeatRangeInfo;
@@ -43,7 +43,7 @@ public class SelectionController : MonoBehaviour {
 		m_tabManager = GetComponent<InputFieldTabManager> ();
 
 		m_actionnerListContentPanel = m_panelActionnerList.transform.GetChild (1).GetChild (0).GetChild (0).GetChild (0).gameObject;
-		Building b = GameObject.Find ("building").GetComponent<Building> ();
+		Building b = m_configurationController.GetBuilding();
 		b.Initialize ();
 		m_actionnerButtonList = new List<GameObject> ();
 		foreach (Floor f in b.GetFloors())
@@ -51,8 +51,8 @@ public class SelectionController : MonoBehaviour {
 				foreach (Room r in rc.GetRooms())
 					foreach (Actionner a in r.GetCommandableActionnerList())
 						AddButtonToActionnerList (m_actionnerButtonList.ToArray().Length);
-//		RectTransform rectT = m_actionnerListContentPanel.GetComponent<RectTransform> ();
-//		rectT.offsetMax = new Vector2(rectT.offsetMax.x, m_actionnerButtonList.ToArray () [0].gameObject.GetComponent<RectTransform> ().rect.height * m_actionnerButtonList.ToArray ().Length);
+		//		RectTransform rectT = m_actionnerListContentPanel.GetComponent<RectTransform> ();
+		//		rectT.offsetMax = new Vector2(rectT.offsetMax.x, m_actionnerButtonList.ToArray () [0].gameObject.GetComponent<RectTransform> ().rect.height * m_actionnerButtonList.ToArray ().Length);
 
 		m_selectedActionnerButton = null;
 		m_panelActionnerList.SetActive (false);
@@ -61,7 +61,7 @@ public class SelectionController : MonoBehaviour {
 
 		m_deliveredEnergyRangeInterval.text = "[Nan ; Nan]";
 	}
-	
+
 	private void AddButtonToActionnerList(int _index)
 	{
 		GameObject bo = Instantiate(Resources.Load("Prefabs/actionnerListButton")) as GameObject;
@@ -75,7 +75,7 @@ public class SelectionController : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {	
-		
+
 		if (m_canSelect && Input.GetMouseButtonDown(0))
 		{
 			/* Left click */
@@ -131,7 +131,7 @@ public class SelectionController : MonoBehaviour {
 		m_panelRoomInfo.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = _roomSelected.transform.parent.gameObject.name;
 		EventSystem.current.SetSelectedGameObject(m_inputfieldObjectiveTemperature.gameObject, null);
 		m_inputfieldObjectiveTemperature.OnPointerClick(new PointerEventData(EventSystem.current));
-		
+
 		ResetActionnerButtonsPanel();
 		m_panelActionnerList.SetActive(true);
 		RoomContainer rc = _roomSelected.transform.parent.gameObject.GetComponent<RoomContainer>();
@@ -159,7 +159,7 @@ public class SelectionController : MonoBehaviour {
 		}
 
 	}
-	
+
 	private void ResetActionnerButtonsPanel()
 	{
 		foreach (GameObject o in m_actionnerButtonList)
@@ -171,7 +171,7 @@ public class SelectionController : MonoBehaviour {
 		foreach(GameObject selectedObject in m_selectedObjects)
 			selectedObject.GetComponent<MeshRenderer>().materials = new Material[0];
 		m_selectedObjects.Clear();
-		
+
 		m_inputfieldObjectiveTemperature.text = "";
 		m_panelHeatRangeInfo.SetActive (false);	
 		m_panelActionnerList.SetActive (false);
@@ -212,14 +212,14 @@ public class SelectionController : MonoBehaviour {
 		foreach (Room r in _rc.GetRooms())
 			foreach (Actionner ac in r.GetCommandableActionnerList())
 				actionnersReadied &= ac.Prepared;
-		
+
 		return actionnersReadied;
 	}
 
 	public void CheckRoomConfigured(RoomContainer _rc)
 	{
 		bool actionnersReadied = ActionnerReadied (_rc);
-		
+
 		if (!float.IsNaN(_rc.ObjectiveTemperature) && actionnersReadied) 
 		{
 			m_configurationController.UpdateConfiguredRoomContainers(_rc);
@@ -240,7 +240,7 @@ public class SelectionController : MonoBehaviour {
 			float temperature;
 			float.TryParse (_temperature, out temperature);
 			c.ObjectiveTemperature = temperature;
-			
+
 			UpdateButtonSimulationLaunch();
 		}
 		else
@@ -249,7 +249,7 @@ public class SelectionController : MonoBehaviour {
 		}
 		CheckRoomConfigured (c);
 	}
-	
+
 	public void UpdateMinDeliveredEnergyFromInputField(string _energy)
 	{
 		UpdateMinDeliveredEnergy (_energy, null);
@@ -310,30 +310,30 @@ public class SelectionController : MonoBehaviour {
 	{
 		RoomContainer rc = m_selectedObjects.ToArray () [0].transform.parent.gameObject.GetComponent<RoomContainer> ();
 		Actionner ac;
-		
+
 		if (_ac == null)
 			ac = GameObject.Find (m_selectedActionnerButton.transform.GetChild (0).GetComponent<Text> ().text).GetComponent<Actionner> ();
 		else
 			ac = _ac;
 
-		
+
 		if (!string.IsNullOrEmpty (_energy)) 
 		{
 			float energy;
 			float.TryParse (_energy, out energy);
-			
+
 			if(float.IsNaN(ac.MinDeliveredEnergy) || energy > ac.MinDeliveredEnergy)
 			{
 				if(!float.IsNaN(rc.MaxDeliveredEnergy) && !float.IsNaN(ac.MaxDeliveredEnergy))
 					rc.MaxDeliveredEnergy = rc.MaxDeliveredEnergy - ac.MaxDeliveredEnergy;
 
 				ac.MaxDeliveredEnergy = energy;
-				
+
 				if(float.IsNaN(rc.MaxDeliveredEnergy))
 					rc.MaxDeliveredEnergy = ac.MaxDeliveredEnergy;
 				else
 					rc.MaxDeliveredEnergy = rc.MaxDeliveredEnergy + ac.MaxDeliveredEnergy;
-				
+
 				UpdateHeatIntervalText(rc.MinDeliveredEnergy, rc.MaxDeliveredEnergy);
 
 				if(!float.IsNaN(ac.MinDeliveredEnergy) && !float.IsNaN(ac.MaxDeliveredEnergy))
@@ -381,7 +381,7 @@ public class SelectionController : MonoBehaviour {
 			{
 				m_selectedObjects.Clear();
 				m_selectedObjects.Add(rc.transform.GetChild(0).gameObject);
-				UpdateObjectiveTemperature(rd.Next(-10, 20).ToString());
+				UpdateObjectiveTemperature(rd.Next(12, 25).ToString());
 				m_selectedObjects.Clear();
 
 				foreach(Room r in rc.GetRooms())
@@ -393,18 +393,18 @@ public class SelectionController : MonoBehaviour {
 					{
 						switch(ac.m_properties)				
 						{
-							case ActionnerProperties.AirConditionner:
-								UpdateMinDeliveredEnergy(rd.Next(-30, -10).ToString(), ac);
-								UpdateMaxDeliveredEnergy("0", ac);
-								break;
-							case ActionnerProperties.GazHeater:	
-								UpdateMinDeliveredEnergy("0", ac);
-								UpdateMaxDeliveredEnergy(rd.Next(10, 30).ToString(), ac);
-								break;
-							case ActionnerProperties.RadiativeHeater:
-								UpdateMinDeliveredEnergy("0", ac);
-								UpdateMaxDeliveredEnergy(rd.Next(10, 40).ToString(), ac);
-								break;
+						case ActionnerProperties.AirConditionner:
+							UpdateMinDeliveredEnergy(rd.Next(-4200, -2500).ToString(), ac);
+							UpdateMaxDeliveredEnergy(rd.Next(3000, 6000).ToString(), ac);
+							break;
+						case ActionnerProperties.GazHeater:	
+							UpdateMinDeliveredEnergy("0", ac);
+							UpdateMaxDeliveredEnergy(rd.Next(700, 3100).ToString(), ac);
+							break;
+						case ActionnerProperties.RadiativeHeater:
+							UpdateMinDeliveredEnergy("0", ac);
+							UpdateMaxDeliveredEnergy(rd.Next(500, 2000).ToString(), ac);
+							break;
 						}
 					}
 				}

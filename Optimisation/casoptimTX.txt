@@ -1,0 +1,61 @@
+informations :
+casoptimTX
+E:\UTBM\GMC\GMC05\TX\Programme\Building_Temperature_Optimizer-jnovak\Optimisation\casoptimTX.txt
+13/12/2015 12:13:13
+13/12/2015 12:13:13
+1
+Test optimisation sur modele thermique
+0 2 0 0 0
+enonce :
+PSO
+custom
+[l0.0]+[l0.1];[x0];[x1]
+post
+1
+parameters :
+7 50 50 1 1 0,4 0,9 1 10 1 0,8 2 50
+variables :
+ c 
+ c 
+ c 
+ c 
+ c 
+ c 
+ c 
+init :
+0
+contraintes :
+0 1187 1e9
+0 2781 1e9
+0 1856 1e9
+0 2954 1e9
+0 3572 1e9
+-3936 5219 1e9
+-4127 5677 1e9
+contraintes spe1 :
+fin spe
+contraintes spe2 :
+fin spe
+contraintes post1 :
+fin post
+contraintes post2 :
+fin post
+extra :
+0 1187 -118.7 118.7 1.187
+0 2781 -278.1 278.1 2.781
+0 1856 -185.6 185.6 1.856
+0 2954 -295.4 295.4 2.954
+0 3572 -357.2 357.2 3.572
+-3936 5219 -915.5 915.5 9.155
+-4127 5677 -980.4 980.4 9.804
+lien :
+1
+debut lien
+thermique
+ESA
+E:\UTBM\GMC\GMC05\TX\Programme\Building_Temperature_Optimizer-jnovak\Optimisation\Calcul Flux\bin\Release\Calcul Flux.exe
+
+
+
+
+fin lien

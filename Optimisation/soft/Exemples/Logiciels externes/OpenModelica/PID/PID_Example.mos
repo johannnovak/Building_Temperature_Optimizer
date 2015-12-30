@@ -1,0 +1,4 @@
+cd();
+loadFile("E:/UTBM/ST40/WFA/WFA1/bin/Debug/PID/PID_Example.mo"); getErrorString();
+loadModel(Modelica); getErrorString();
+simulate(PID_Example, stopTime=1, outputFormat="csv"); getErrorString();

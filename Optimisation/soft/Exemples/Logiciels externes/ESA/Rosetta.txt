@@ -1,0 +1,106 @@
+informations :
+Rosetta
+E:\UTBM\ST40\Simulation\Rosetta.txt
+16/01/2015 16:55:11
+16/01/2015 17:34:38
+1
+
+2 2 3 2 10
+enonce :
+Genetic
+Lien
+
+direct
+1
+parameters :
+22 800 20 0 0.7 0.1 1
+variables :
+ c 
+ c 
+ c 
+ c 
+ c 
+ c 
+ c 
+ c 
+ c 
+ c 
+ c 
+ c 
+ c 
+ c 
+ c 
+ c 
+ c 
+ c 
+ c 
+ c 
+ c 
+ c 
+init :
+0
+contraintes :
+1460 1825 1e6
+3 5 1e6
+0 1 1e6
+0 1 1e6
+300 500 1e6
+150 800 1e6
+150 800 1e6
+300 800 1e6
+700 1850 1e6
+0.01 0.9 1e6
+0.01 0.9 1e6
+0.01 0.9 1e6
+0.01 0.9 1e6
+0.01 0.9 1e6
+1.05 9 1e6
+1.05 9 1e6
+1.05 9 1e6
+1.05 9 1e6
+-3.1415 3.1415 1e6
+-3.1415 3.1415 1e6
+-3.1415 3.1415 1e6
+-3.1415 3.1415 1e6
+contraintes spe1 :
+fin spe
+contraintes spe2 :
+fin spe
+contraintes post1 :
+fin post
+contraintes post2 :
+fin post
+extra :
+1460 1825 -20 20 1e-9
+3 5 1e-9
+0 1 1e-9
+0 1 1e-9
+300 500 1e-9
+150 800 1e-9
+150 800 1e-9
+300 800 1e-9
+700 1850 1e-9
+0.01 0.9 1e-9
+0.01 0.9 1e-9
+0.01 0.9 1e-9
+0.01 0.9 1e-9
+0.01 0.9 1e-9
+1.05 9 1e-9
+1.05 9 1e-9
+1.05 9 1e-9
+1.05 9 1e-9
+-3.1415 3.1415 1e-9
+-3.1415 3.1415 1e-9
+-3.1415 3.1415 1e-9
+-3.1415 3.1415 1e-9
+lien :
+1
+debut lien
+
+ESA
+E:\UTBM\ST40\Liens_soft\Rosetta.exe
+
+
+
+
+fin lien
